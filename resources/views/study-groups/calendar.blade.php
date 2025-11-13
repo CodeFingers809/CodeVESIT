@@ -111,9 +111,28 @@
                         {{ $event->event_date->format('M d, Y - h:i A') }}
                     </div>
 
-                    <div class="text-xs text-gruvbox-light-fg4 dark:text-gruvbox-dark-fg4">
+                    <div class="text-xs text-gruvbox-light-fg4 dark:text-gruvbox-dark-fg4 mb-3">
                         Created by {{ $event->creator->name }}
                     </div>
+
+                    @if($isModerator)
+                        <div class="flex gap-2 flex-wrap">
+                            <form action="{{ route('study-groups.calendar.toggle', $event) }}" method="POST" class="inline">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="px-3 py-1 bg-gruvbox-light-yellow dark:bg-gruvbox-dark-yellow text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
+                                    Uncomplete
+                                </button>
+                            </form>
+                            <form action="{{ route('study-groups.calendar.destroy', $event) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this completed event?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-3 py-1 bg-gruvbox-light-red dark:bg-gruvbox-dark-red text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             @empty
                 <p class="text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 text-center py-8">No completed events</p>

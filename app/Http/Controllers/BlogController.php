@@ -37,6 +37,7 @@ class BlogController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
+            'excerpt' => 'required|string|min:50|max:300',
             'document' => 'required|file|mimes:docx|max:10240', // 10MB max
         ]);
 
@@ -45,6 +46,7 @@ class BlogController extends Controller
 
         BlogRequest::create([
             'title' => $validated['title'],
+            'excerpt' => $validated['excerpt'],
             'content' => '', // Empty as content is in the document
             'document_path' => $documentPath,
             'user_id' => auth()->id(),

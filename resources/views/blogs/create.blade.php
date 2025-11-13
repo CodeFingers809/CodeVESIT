@@ -30,6 +30,21 @@
                     </div>
 
                     <div>
+                        <label for="excerpt" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
+                            Brief Description <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
+                        </label>
+                        <textarea id="excerpt" name="excerpt" required rows="3" maxlength="300"
+                                  placeholder="Write a brief description of your blog (150-300 characters). This will be shown as a preview in the blog list."
+                                  class="w-full px-4 py-3 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ old('excerpt') }}</textarea>
+                        @error('excerpt')
+                            <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-2 text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">
+                            This description will be displayed as a preview in the blog listing page.
+                        </p>
+                    </div>
+
+                    <div>
                         <label for="document" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
                             Blog Document (.docx) <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
                         </label>

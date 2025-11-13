@@ -125,6 +125,24 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::post('/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('users.toggle-status');
     Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
 
+    // Blog Management
+    Route::get('/blogs', [AdminController::class, 'blogs'])->name('blogs');
+    Route::patch('/blogs/{blog}', [AdminController::class, 'updateBlog'])->name('blogs.update');
+    Route::post('/blogs/{blog}/toggle-published', [AdminController::class, 'toggleBlogFeature'])->name('blogs.toggle');
+    Route::delete('/blogs/{blog}', [AdminController::class, 'deleteBlog'])->name('blogs.delete');
+
+    // Event Management
+    Route::get('/events', [AdminController::class, 'events'])->name('events');
+    Route::patch('/events/{event}', [AdminController::class, 'updateEvent'])->name('events.update');
+    Route::post('/events/{event}/toggle-featured', [AdminController::class, 'toggleEventFeature'])->name('events.toggle');
+    Route::delete('/events/{event}', [AdminController::class, 'deleteEvent'])->name('events.delete');
+
+    // Forum Management
+    Route::get('/forums', [AdminController::class, 'forums'])->name('forums');
+    Route::post('/forums', [AdminController::class, 'storeForum'])->name('forums.store');
+    Route::patch('/forums/{forum}', [AdminController::class, 'updateForum'])->name('forums.update');
+    Route::delete('/forums/{forum}', [AdminController::class, 'deleteForum'])->name('forums.delete');
+
     // Database Management (View only - for safety)
     Route::get('/database', [AdminController::class, 'database'])->name('database');
 });
