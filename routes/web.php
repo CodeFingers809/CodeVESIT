@@ -38,6 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/{studyGroup}/announcements', [StudyGroupController::class, 'announcements'])->name('announcements');
         Route::post('/{studyGroup}/announcements', [StudyGroupController::class, 'storeAnnouncement'])->name('announcements.store');
+        Route::delete('/{studyGroup}/announcements/{announcement}', [StudyGroupController::class, 'destroyAnnouncement'])->name('announcements.destroy');
 
         Route::get('/{studyGroup}/chat', [StudyGroupController::class, 'chat'])->name('chat');
         Route::post('/{studyGroup}/chat', [StudyGroupController::class, 'storeMessage'])->name('chat.store');
