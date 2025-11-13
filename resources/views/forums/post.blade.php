@@ -211,7 +211,7 @@
         function openReportModal(type, id) {
             const form = document.getElementById('reportForm');
             if (type === 'post') {
-                form.action = `/forums/{{ $forum->id }}/posts/{{ $post->id }}/report`;
+                form.action = '{{ route('forums.posts.report', [$forum, $post]) }}';
             } else {
                 form.action = `/forums/{{ $forum->id }}/posts/{{ $post->id }}/comments/${id}/report`;
             }

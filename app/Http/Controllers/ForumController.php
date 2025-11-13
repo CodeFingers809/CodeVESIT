@@ -47,16 +47,15 @@ class ForumController extends Controller
         return back()->with('success', 'Post created successfully!');
     }
 
-    public function showPost(ForumPost $post): View
+    public function showPost(Forum $forum, ForumPost $post): View
     {
         $post->increment('views');
-        $post->load(['user', 'forum', 'comments.user', 'comments.replies.user']);
+        $post->load(['user', 'comments.user', 'comments.replies.user']);
 
-        $forum = $post->forum;
         return view('forums.post', compact('post', 'forum'));
     }
 
-    public function storeComment(Request $request, ForumPost $post)
+    public function storeComment(Request $request, Forum $forum, ForumPost $post)
     {
         $validated = $request->validate([
             'content' => 'required|string',
@@ -72,7 +71,7 @@ class ForumController extends Controller
         return back()->with('success', 'Comment posted!');
     }
 
-    public function reportPost(Request $request, ForumPost $post)
+    public function reportPost(Request $request, Forum $forum, ForumPost $post)
     {
         $validated = $request->validate([
             'reason' => 'required|string|max:500',
@@ -88,7 +87,7 @@ class ForumController extends Controller
         return back()->with('success', 'Post reported. Our team will review it.');
     }
 
-    public function reportComment(Request $request, ForumComment $comment)
+    public function reportComment(Request $request, Forum $forum, ForumPost $post, ForumComment $comment)
     {
         $validated = $request->validate([
             'reason' => 'required|string|max:500',

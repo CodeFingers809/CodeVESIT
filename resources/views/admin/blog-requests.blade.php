@@ -28,6 +28,16 @@
                             <span>Author: {{ $request->user->name }}</span>
                             <span>Status: <span class="px-2 py-1 rounded text-xs {{ $request->status === 'approved' ? 'bg-gruvbox-light-green/20 text-gruvbox-light-green' : ($request->status === 'rejected' ? 'bg-gruvbox-light-red/20 text-gruvbox-light-red' : 'bg-gruvbox-light-yellow/20 text-gruvbox-light-yellow') }}">{{ ucfirst($request->status) }}</span></span>
                         </div>
+                        @if($request->document_path)
+                            <div class="mt-3">
+                                <a href="{{ $request->document_path }}" target="_blank" class="inline-flex items-center text-sm text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    View/Download Document
+                                </a>
+                            </div>
+                        @endif
                         @if($request->rejection_reason)
                             <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">Rejection reason: {{ $request->rejection_reason }}</p>
                         @endif

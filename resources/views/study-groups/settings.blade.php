@@ -1,9 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <div>
+            <div class="flex items-center space-x-2">
+                <a href="{{ route('study-groups.show', $studyGroup) }}" class="text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline">
+                    {{ $studyGroup->name }}
+                </a>
+                <span class="text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">/</span>
                 <h2 class="font-semibold text-2xl text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">
-                    {{ $studyGroup->name }} - Settings
+                    Settings
                 </h2>
             </div>
         </div>

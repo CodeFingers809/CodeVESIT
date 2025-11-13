@@ -71,10 +71,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/', [ForumController::class, 'index'])->name('index');
         Route::get('/{forum}', [ForumController::class, 'show'])->name('show');
         Route::post('/{forum}/posts', [ForumController::class, 'storePost'])->name('posts.store');
-        Route::get('/posts/{post}', [ForumController::class, 'showPost'])->name('posts.show');
-        Route::post('/posts/{post}/comments', [ForumController::class, 'storeComment'])->name('comments.store');
-        Route::post('/posts/{post}/report', [ForumController::class, 'reportPost'])->name('posts.report');
-        Route::post('/comments/{comment}/report', [ForumController::class, 'reportComment'])->name('comments.report');
+        Route::get('/{forum}/posts/{post}', [ForumController::class, 'showPost'])->name('posts.show');
+        Route::post('/{forum}/posts/{post}/comments', [ForumController::class, 'storeComment'])->name('posts.comments.store');
+        Route::post('/{forum}/posts/{post}/report', [ForumController::class, 'reportPost'])->name('posts.report');
+        Route::post('/{forum}/posts/{post}/comments/{comment}/report', [ForumController::class, 'reportComment'])->name('posts.comments.report');
     });
 
     // Blogs
