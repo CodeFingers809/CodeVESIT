@@ -13,13 +13,13 @@
                 </p>
             </div>
 
-            <form action="{{ route('blogs.store') }}" method="POST">
+            <form action="{{ route('blogs.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="space-y-6">
                     <div>
                         <label for="title" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
-                            Title <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
+                            Blog Title <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
                         </label>
                         <input type="text" id="title" name="title" required value="{{ old('title') }}"
                                placeholder="Enter your blog title"
@@ -30,30 +30,33 @@
                     </div>
 
                     <div>
-                        <label for="excerpt" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
-                            Excerpt (Optional)
+                        <label for="document" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
+                            Blog Document (.docx) <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
                         </label>
-                        <textarea id="excerpt" name="excerpt" rows="2"
-                                  placeholder="A brief summary of your blog (optional)"
-                                  class="w-full px-4 py-3 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ old('excerpt') }}</textarea>
-                        @error('excerpt')
-                            <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="content" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
-                            Content <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
-                        </label>
-                        <textarea id="content" name="content" rows="20" required
-                                  placeholder="Write your blog content here..."
-                                  class="w-full px-4 py-3 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 font-mono">{{ old('content') }}</textarea>
-                        @error('content')
+                        <input type="file" id="document" name="document" required accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                               class="w-full px-4 py-3 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gruvbox-light-purple dark:file:bg-gruvbox-dark-purple file:text-gruvbox-light-bg0 dark:file:text-gruvbox-dark-bg0 hover:file:opacity-90">
+                        @error('document')
                             <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
                         @enderror
                         <p class="mt-2 text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">
-                            Minimum 100 characters required
+                            Upload your blog as a Microsoft Word document (.docx format). Maximum file size: 10MB.
                         </p>
+                    </div>
+
+                    <div class="p-4 rounded-lg bg-gruvbox-light-aqua/20 dark:bg-gruvbox-dark-aqua/20 border border-gruvbox-light-aqua/50 dark:border-gruvbox-dark-aqua/50">
+                        <h4 class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Document Guidelines
+                        </h4>
+                        <ul class="text-xs text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 space-y-1 list-disc list-inside ml-4">
+                            <li>Use Microsoft Word (.docx) format only</li>
+                            <li>Include proper headings, formatting, and structure in your document</li>
+                            <li>Images and media can be embedded directly in the document</li>
+                            <li>Ensure content is original and follows community guidelines</li>
+                            <li>Your document will be rendered in the platform's theme after admin approval</li>
+                        </ul>
                     </div>
                 </div>
 

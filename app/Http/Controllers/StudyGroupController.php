@@ -46,7 +46,7 @@ class StudyGroupController extends Controller
             ->with('success', 'Study group request submitted! Awaiting admin approval.');
     }
 
-    public function show(StudyGroup $studyGroup): View
+    public function show(StudyGroup $studyGroup)
     {
         if (!$studyGroup->isApproved()) {
             abort(404, 'Study group not found or not approved.');
@@ -56,9 +56,8 @@ class StudyGroupController extends Controller
             abort(403, 'You must be a member to view this study group.');
         }
 
-        $isModerator = $studyGroup->isModerator(auth()->user());
-
-        return view('study-groups.show', compact('studyGroup', 'isModerator'));
+        // Redirect to announcements (default view)
+        return redirect()->route('study-groups.announcements', $studyGroup);
     }
 
     public function join(Request $request)
