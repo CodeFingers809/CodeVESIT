@@ -42,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/{studyGroup}/chat', [StudyGroupController::class, 'chat'])->name('chat');
         Route::post('/{studyGroup}/chat', [StudyGroupController::class, 'storeMessage'])->name('chat.store');
+        Route::post('/{studyGroup}/chat/{message}/report', [StudyGroupController::class, 'reportMessage'])->name('chat.report');
 
         Route::get('/{studyGroup}/calendar', [StudyGroupController::class, 'calendar'])->name('calendar');
         Route::post('/{studyGroup}/calendar', [StudyGroupController::class, 'storeCalendarEvent'])->name('calendar.store');
