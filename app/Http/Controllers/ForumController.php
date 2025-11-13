@@ -50,9 +50,10 @@ class ForumController extends Controller
     public function showPost(ForumPost $post): View
     {
         $post->increment('views');
-        $post->load(['user', 'comments.user', 'comments.replies.user']);
-        
-        return view('forums.post', compact('post'));
+        $post->load(['user', 'forum', 'comments.user', 'comments.replies.user']);
+
+        $forum = $post->forum;
+        return view('forums.post', compact('post', 'forum'));
     }
 
     public function storeComment(Request $request, ForumPost $post)

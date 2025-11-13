@@ -59,7 +59,8 @@ class DashboardController extends Controller
             'is_completed' => 'nullable|boolean',
         ]);
 
-        $calendarEvent->update(array_filter($validated));
+        // Filter out only null values, not false or other falsy values
+        $calendarEvent->update(array_filter($validated, fn($value) => $value !== null));
 
         return redirect()->back()->with('success', 'Task updated successfully!');
     }

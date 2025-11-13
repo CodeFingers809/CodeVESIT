@@ -57,6 +57,7 @@
                         <form action="{{ route('calendar.events.update', $event) }}" method="POST" class="inline">
                             @csrf
                             @method('PATCH')
+                            <input type="hidden" name="is_completed" value="1">
                             <button type="submit" class="px-3 py-1 bg-gruvbox-light-green dark:bg-gruvbox-dark-green text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
                                 Complete
                             </button>
