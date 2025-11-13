@@ -25,9 +25,18 @@ class ForumController extends Controller
 
     public function storePost(Request $request, Forum $forum)
     {
+        // Check rate limit: 5 posts per day per user
+        $postsToday = ForumPost::where('user_id', auth()->id())
+            ->whereDate('created_at', today())
+            ->count();
+
+        if ($postsToday >= 5) {
+            return back()->with('error', 'You have reached the daily limit of 5 forum posts. Please try again tomorrow.');
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'content' => 'required|string|min:10',
         ]);
 
         $forum->posts()->create([

@@ -154,6 +154,15 @@
                     @if (isset($header))
                         <div class="bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border-b border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
                             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                                <!-- Breadcrumbs -->
+                                @if (isset($breadcrumbs))
+                                    <nav class="mb-4">
+                                        <ol class="flex items-center space-x-2 text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">
+                                            {{ $breadcrumbs }}
+                                        </ol>
+                                    </nav>
+                                @endif
+
                                 {{ $header }}
                             </div>
                         </div>
@@ -165,6 +174,13 @@
                             @if (session('success'))
                                 <div class="mb-4 p-4 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20 border border-gruvbox-light-green dark:border-gruvbox-dark-green">
                                     <p class="text-gruvbox-light-green dark:text-gruvbox-dark-green font-medium">{{ session('success') }}</p>
+                                </div>
+                            @endif
+
+                            <!-- Error Message -->
+                            @if (session('error'))
+                                <div class="mb-4 p-4 rounded-lg bg-gruvbox-light-red/20 dark:bg-gruvbox-dark-red/20 border border-gruvbox-light-red dark:border-gruvbox-dark-red">
+                                    <p class="text-gruvbox-light-red dark:text-gruvbox-dark-red font-medium">{{ session('error') }}</p>
                                 </div>
                             @endif
 

@@ -18,9 +18,19 @@ class DashboardController extends Controller
 
     public function calendar(): View
     {
-        $events = auth()->user()->calendarEvents()->orderBy('start_date')->get();
+        $upcomingEvents = auth()->user()->calendarEvents()
+            ->where('is_completed', false)
+            ->where('event_date', '>=', now())
+            ->orderBy('event_date')
+            ->get();
 
-        return view('calendar.index', compact('events'));
+        $completedEvents = auth()->user()->calendarEvents()
+            ->where('is_completed', true)
+            ->orderBy('event_date', 'desc')
+            ->limit(10)
+            ->get();
+
+        return view('calendar.index', compact('upcomingEvents', 'completedEvents'));
     }
 
     public function storeCalendarEvent(Request $request)
