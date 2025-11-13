@@ -70,33 +70,37 @@
         </div>
     </div>
 
-    <!-- Moderation Instructions -->
-    <div class="p-6 rounded-lg bg-gruvbox-light-yellow/20 dark:bg-gruvbox-dark-yellow/20 border border-gruvbox-light-yellow dark:border-gruvbox-dark-yellow">
-        <h3 class="text-lg font-bold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-3">Content Moderation</h3>
-        <p class="text-sm text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 mb-4">
-            To approve/reject content, access your database directly. Full admin UI pages coming soon.
-        </p>
 
-        <div class="space-y-3">
-            <div>
-                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Study Groups (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">study_groups</code>)</p>
-                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'approved' or 'rejected'</p>
-            </div>
+    <!-- Management Links -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="{{ route('admin.study-groups') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-blue dark:hover:border-gruvbox-dark-blue transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Study Groups</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Approve or reject study group requests</p>
+        </a>
 
-            <div>
-                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Blogs (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">blog_requests</code>)</p>
-                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'approved' to publish, or 'rejected' with <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">rejection_reason</code></p>
-            </div>
+        <a href="{{ route('admin.blog-requests') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-purple dark:hover:border-gruvbox-dark-purple transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Blog Requests</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Review and approve blog submissions</p>
+        </a>
 
-            <div>
-                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Events (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">event_requests</code>)</p>
-                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'approved' or 'rejected'</p>
-            </div>
+        <a href="{{ route('admin.event-requests') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-aqua dark:hover:border-gruvbox-dark-aqua transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Event Requests</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Review and approve event submissions</p>
+        </a>
 
-            <div>
-                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Reports (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">reports</code>)</p>
-                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Review reported content and take action, then set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'resolved'</p>
-            </div>
-        </div>
+        <a href="{{ route('admin.reports') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-red dark:hover:border-gruvbox-dark-red transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Reports</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Handle reported content and users</p>
+        </a>
+
+        <a href="{{ route('admin.users') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-green dark:hover:border-gruvbox-dark-green transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Users</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Manage user roles and status</p>
+        </a>
+
+        <a href="{{ route('admin.database') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-orange dark:hover:border-gruvbox-dark-orange transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Database Overview</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">View database statistics</p>
+        </a>
     </div>
 </x-app-layout>

@@ -80,6 +80,11 @@ class StudyGroup extends Model
         return $this->hasMany(StudyGroupMessage::class);
     }
 
+    public function calendarEvents()
+    {
+        return $this->hasMany(StudyGroupCalendarEvent::class);
+    }
+
     // Helper methods
     public function isApproved(): bool
     {

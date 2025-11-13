@@ -14,12 +14,7 @@
         </div>
     </x-slot>
 
-    <!-- Back Link -->
-    <div class="mb-6">
-        <a href="{{ route('study-groups.show', $studyGroup) }}" class="text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline">
-            ← Back to Group
-        </a>
-    </div>
+    @include('study-groups.partials.navigation-tabs')
 
     <!-- Todos List -->
     @if($todos->isEmpty())
