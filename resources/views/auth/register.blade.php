@@ -24,11 +24,10 @@
                 <option value="">Select Department</option>
                 <option value="Computer Engineering" {{ old('department') == 'Computer Engineering' ? 'selected' : '' }}>Computer Engineering</option>
                 <option value="Information Technology" {{ old('department') == 'Information Technology' ? 'selected' : '' }}>Information Technology</option>
-                <option value="Electronics Engineering" {{ old('department') == 'Electronics Engineering' ? 'selected' : '' }}>Electronics Engineering</option>
-                <option value="Electronics & Telecommunication" {{ old('department') == 'Electronics & Telecommunication' ? 'selected' : '' }}>Electronics & Telecommunication</option>
-                <option value="Mechanical Engineering" {{ old('department') == 'Mechanical Engineering' ? 'selected' : '' }}>Mechanical Engineering</option>
-                <option value="Instrumentation Engineering" {{ old('department') == 'Instrumentation Engineering' ? 'selected' : '' }}>Instrumentation Engineering</option>
                 <option value="Artificial Intelligence & Data Science" {{ old('department') == 'Artificial Intelligence & Data Science' ? 'selected' : '' }}>Artificial Intelligence & Data Science</option>
+                <option value="Electronics & Telecommunication" {{ old('department') == 'Electronics & Telecommunication' ? 'selected' : '' }}>Electronics & Telecommunication</option>
+                <option value="Electronics Engineering" {{ old('department') == 'Electronics Engineering' ? 'selected' : '' }}>Electronics & Computer Science</option>
+                <option value="Instrumentation Engineering" {{ old('department') == 'Instrumentation Engineering' ? 'selected' : '' }}>Automation & Robotics</option>
             </select>
             <x-input-error :messages="$errors->get('department')" class="mt-2" />
         </div>
