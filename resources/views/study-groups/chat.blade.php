@@ -33,7 +33,7 @@
                         </div>
 
                         <div class="flex items-start justify-between">
-                            <p class="text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 whitespace-pre-wrap break-words">{{ $message->content }}</p>
+                            <p class="text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 whitespace-pre-wrap break-words">{{ $message->message }}</p>
 
                             @if(auth()->id() !== $message->user_id)
                                 <button onclick="openReportModal({{ $message->id }})"

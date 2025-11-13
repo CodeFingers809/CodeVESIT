@@ -13,6 +13,7 @@ class Blog extends Model
         'excerpt',
         'content',
         'featured_image',
+        'document_path',
         'views',
         'is_published',
         'published_at',

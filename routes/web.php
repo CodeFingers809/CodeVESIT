@@ -122,6 +122,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::post('/users/{user}/toggle-role', [AdminController::class, 'toggleUserRole'])->name('users.toggle-role');
     Route::post('/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('users.toggle-status');
+    Route::delete('/users/{user}', [AdminController::class, 'deleteUser'])->name('users.delete');
 
     // Database Management (View only - for safety)
     Route::get('/database', [AdminController::class, 'database'])->name('database');

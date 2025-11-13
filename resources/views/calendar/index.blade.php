@@ -50,7 +50,7 @@
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
-                        {{ $event->event_date->format('M d, Y - h:i A') }}
+                        {{ $event->start_date->format('M d, Y - h:i A') }}
                     </div>
 
                     <div class="flex gap-2">
@@ -100,7 +100,7 @@
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
-                        {{ $event->event_date->format('M d, Y - h:i A') }}
+                        {{ $event->start_date->format('M d, Y - h:i A') }}
                     </div>
                 </div>
             @empty
@@ -131,7 +131,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Date & Time</label>
-                        <input type="datetime-local" name="event_date" required
+                        <input type="datetime-local" name="start_date" required
                                class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">
                     </div>
 
@@ -183,7 +183,7 @@
 
                     <div>
                         <label class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Date & Time</label>
-                        <input type="datetime-local" name="event_date" id="edit_event_date" required
+                        <input type="datetime-local" name="start_date" id="edit_start_date" required
                                class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">
                     </div>
 
@@ -217,7 +217,7 @@
             document.getElementById('editEventForm').action = `/calendar/events/${event.id}`;
             document.getElementById('edit_title').value = event.title;
             document.getElementById('edit_description').value = event.description || '';
-            document.getElementById('edit_event_date').value = event.event_date.replace(' ', 'T').substring(0, 16);
+            document.getElementById('edit_start_date').value = event.start_date.replace(' ', 'T').substring(0, 16);
             document.getElementById('edit_priority').value = event.priority;
             document.getElementById('editEventModal').classList.remove('hidden');
         }
