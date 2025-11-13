@@ -37,17 +37,21 @@ class BlogController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'excerpt' => 'nullable|string|max:500',
-            'content' => 'required|string',
+            'document' => 'required|file|mimes:docx|max:10240', // 10MB max
         ]);
 
+        // Store the document file
+        $documentPath = $request->file('document')->store('blogs', 'public');
+
         BlogRequest::create([
-            ...$validated,
+            'title' => $validated['title'],
+            'content' => '', // Empty as content is in the document
+            'document_path' => $documentPath,
             'user_id' => auth()->id(),
         ]);
 
         return redirect()->route('blogs.my')
-            ->with('success', 'Blog submitted for review!');
+            ->with('success', 'Blog document submitted for review!');
     }
 
     public function show(Blog $blog): View

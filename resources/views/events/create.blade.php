@@ -34,19 +34,20 @@
                             Description <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
                         </label>
                         <textarea id="description" name="description" rows="6" required
-                                  placeholder="Describe your event in detail"
+                                  placeholder="Describe your event in detail (mention time here if needed, e.g., '10:00 AM - 2:00 PM')"
                                   class="w-full px-4 py-3 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ old('description') }}</textarea>
+                        <p class="mt-1 text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Include event time in the description if needed</p>
                         @error('description')
                             <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
-                        @enderror>
+                        @enderror
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="start_date" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
-                                Start Date & Time <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
+                                Event Date <span class="text-gruvbox-light-red dark:text-gruvbox-dark-red">*</span>
                             </label>
-                            <input type="datetime-local" id="start_date" name="start_date" required value="{{ old('start_date') }}"
+                            <input type="date" id="start_date" name="start_date" required value="{{ old('start_date') }}"
                                    class="w-full px-4 py-3 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">
                             @error('start_date')
                                 <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
@@ -55,9 +56,9 @@
 
                         <div>
                             <label for="end_date" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">
-                                End Date & Time (Optional)
+                                End Date (Optional - for multi-day events)
                             </label>
-                            <input type="datetime-local" id="end_date" name="end_date" value="{{ old('end_date') }}"
+                            <input type="date" id="end_date" name="end_date" value="{{ old('end_date') }}"
                                    class="w-full px-4 py-3 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">
                             @error('end_date')
                                 <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>

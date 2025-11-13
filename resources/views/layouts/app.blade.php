@@ -116,14 +116,16 @@
                         </div>
                         
                         <div class="flex items-center space-x-3 p-3 rounded-lg bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2">
-                            <img src="{{ auth()->user()->getAvatarUrl() }}" alt="{{ auth()->user()->name }}" class="w-10 h-10 rounded-lg">
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 truncate">{{ auth()->user()->name }}</p>
-                                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 truncate">{{ auth()->user()->email }}</p>
-                            </div>
+                            <a href="{{ route('profile.edit') }}" class="flex items-center space-x-3 flex-1 min-w-0 hover:opacity-80 transition-opacity" title="Edit Profile & Settings">
+                                <img src="{{ auth()->user()->getAvatarUrl() }}" alt="{{ auth()->user()->name }}" class="w-10 h-10 rounded-lg">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 truncate">{{ auth()->user()->name }}</p>
+                                    <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 truncate">{{ auth()->user()->email }}</p>
+                                </div>
+                            </a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" class="text-gruvbox-light-red dark:text-gruvbox-dark-red hover:text-gruvbox-light-red/80 dark:hover:text-gruvbox-dark-red/80">
+                                <button type="submit" class="text-gruvbox-light-red dark:text-gruvbox-dark-red hover:text-gruvbox-light-red/80 dark:hover:text-gruvbox-dark-red/80" title="Logout">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                                     </svg>
