@@ -8,12 +8,6 @@
     <div class="mb-6 p-6 rounded-lg bg-gradient-to-r from-gruvbox-light-green/80 to-gruvbox-light-aqua/80 dark:from-gruvbox-dark-green/80 dark:to-gruvbox-dark-aqua/80">
         <h3 class="text-2xl font-bold text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0">College-Wide Forums</h3>
         <p class="mt-2 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Engage in discussions with students across all departments</p>
-        <p class="mt-3 text-sm text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            Click on any forum below to view posts and create your own
-        </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

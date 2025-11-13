@@ -20,13 +20,13 @@ class DashboardController extends Controller
     {
         $upcomingEvents = auth()->user()->calendarEvents()
             ->where('is_completed', false)
-            ->where('event_date', '>=', now())
-            ->orderBy('event_date')
+            ->where('start_date', '>=', now())
+            ->orderBy('start_date')
             ->get();
 
         $completedEvents = auth()->user()->calendarEvents()
             ->where('is_completed', true)
-            ->orderBy('event_date', 'desc')
+            ->orderBy('start_date', 'desc')
             ->limit(10)
             ->get();
 
@@ -38,7 +38,7 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'event_date' => 'required|date',
+            'start_date' => 'required|date',
             'priority' => 'required|in:low,medium,high',
         ]);
 
@@ -54,7 +54,7 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'event_date' => 'nullable|date',
+            'start_date' => 'nullable|date',
             'priority' => 'nullable|in:low,medium,high',
             'is_completed' => 'nullable|boolean',
         ]);

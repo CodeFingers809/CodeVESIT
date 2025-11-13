@@ -55,6 +55,13 @@
                                 Toggle Status
                             </button>
                         </form>
+                        <form method="POST" action="{{ route('admin.users.delete', $user) }}" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="px-4 py-2 bg-gruvbox-light-red dark:bg-gruvbox-dark-red text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity text-sm">
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

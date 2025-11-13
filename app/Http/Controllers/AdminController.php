@@ -210,6 +210,17 @@ class AdminController extends Controller
         return back()->with('success', 'User status updated!');
     }
 
+    public function deleteUser(User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->withErrors(['error' => 'Cannot delete your own account!']);
+        }
+
+        $user->delete();
+
+        return back()->with('success', 'User deleted successfully!');
+    }
+
     // Database Overview (Read-only)
     public function database(): View
     {
