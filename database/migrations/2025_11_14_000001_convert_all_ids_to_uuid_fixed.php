@@ -19,10 +19,28 @@ return new class extends Migration
         // Disable foreign key checks
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        // Users table
+        // ==== Drop and recreate auth tables with UUID support ====
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
 
+        // Recreate password reset tokens with UUID
+        Schema::create('password_reset_tokens', function (Blueprint $table) {
+            $table->string('email')->primary();
+            $table->string('token');
+            $table->timestamp('created_at')->nullable();
+        });
+
+        // Recreate sessions with UUID
+        Schema::create('sessions', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->uuid('user_id')->nullable()->index();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->longText('payload');
+            $table->integer('last_activity')->index();
+        });
+
+        // ==== Users table ====
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('id');
         });
@@ -30,18 +48,34 @@ return new class extends Migration
             $table->uuid('id')->primary()->first();
         });
 
-        // Study Groups
+        // Add indexes for performance
+        Schema::table('users', function (Blueprint $table) {
+            $table->index('email');
+            $table->index('role');
+            $table->index(['department', 'year']);
+        });
+
+        // ==== Study Groups ====
         Schema::table('study_groups', function (Blueprint $table) {
-            $table->dropForeign(['creator_id']);
-            $table->dropColumn(['id', 'creator_id']);
+            $table->dropForeign(['created_by', 'approved_by']);
+            $table->dropColumn(['id', 'created_by', 'approved_by']);
         });
         Schema::table('study_groups', function (Blueprint $table) {
             $table->uuid('id')->primary()->first();
-            $table->uuid('creator_id')->after('description');
-            $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
+            $table->uuid('created_by')->after('description');
+            $table->uuid('approved_by')->nullable()->after('status');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
         });
 
-        // Study Group Members
+        // Add indexes
+        Schema::table('study_groups', function (Blueprint $table) {
+            $table->index('status');
+            $table->index('join_code');
+            $table->index('is_active');
+        });
+
+        // ==== Study Group Members ====
         Schema::table('study_group_members', function (Blueprint $table) {
             $table->dropForeign(['study_group_id', 'user_id']);
             $table->dropColumn(['study_group_id', 'user_id']);
@@ -53,7 +87,12 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // Study Group Moderators
+        // Add composite index for lookups
+        Schema::table('study_group_members', function (Blueprint $table) {
+            $table->index(['study_group_id', 'user_id']);
+        });
+
+        // ==== Study Group Moderators ====
         Schema::table('study_group_moderators', function (Blueprint $table) {
             $table->dropForeign(['study_group_id', 'user_id']);
             $table->dropColumn(['study_group_id', 'user_id']);
@@ -65,7 +104,12 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // Study Group Todos
+        // Add composite index
+        Schema::table('study_group_moderators', function (Blueprint $table) {
+            $table->index(['study_group_id', 'user_id']);
+        });
+
+        // ==== Study Group Todos ====
         Schema::table('study_group_todos', function (Blueprint $table) {
             $table->dropForeign(['study_group_id']);
             $table->dropColumn(['id', 'study_group_id']);
@@ -76,7 +120,7 @@ return new class extends Migration
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
         });
 
-        // User Todo Completion
+        // ==== User Todo Completion ====
         Schema::table('user_todo_completions', function (Blueprint $table) {
             $table->dropForeign(['user_id', 'study_group_todo_id']);
             $table->dropColumn(['user_id', 'study_group_todo_id']);
@@ -88,7 +132,7 @@ return new class extends Migration
             $table->foreign('study_group_todo_id')->references('id')->on('study_group_todos')->onDelete('cascade');
         });
 
-        // Study Group Announcements
+        // ==== Study Group Announcements ====
         Schema::table('study_group_announcements', function (Blueprint $table) {
             $table->dropForeign(['study_group_id', 'user_id']);
             $table->dropColumn(['id', 'study_group_id', 'user_id']);
@@ -101,7 +145,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // Study Group Messages
+        // ==== Study Group Messages ====
         Schema::table('study_group_messages', function (Blueprint $table) {
             $table->dropForeign(['study_group_id', 'user_id']);
             $table->dropColumn(['id', 'study_group_id', 'user_id']);
@@ -114,7 +158,7 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // Study Group Calendar Events
+        // ==== Study Group Calendar Events ====
         Schema::table('study_group_calendar_events', function (Blueprint $table) {
             $table->dropForeign(['study_group_id']);
             $table->dropColumn(['id', 'study_group_id']);
@@ -125,7 +169,7 @@ return new class extends Migration
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
         });
 
-        // Personal Calendar Events
+        // ==== Personal Calendar Events ====
         Schema::table('personal_calendar_events', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropColumn(['id', 'user_id']);
@@ -136,7 +180,13 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // Forums
+        // Add index for date queries
+        Schema::table('personal_calendar_events', function (Blueprint $table) {
+            $table->index(['user_id', 'start_date']);
+            $table->index('is_completed');
+        });
+
+        // ==== Forums ====
         Schema::table('forums', function (Blueprint $table) {
             $table->dropColumn('id');
         });
@@ -144,7 +194,12 @@ return new class extends Migration
             $table->uuid('id')->primary()->first();
         });
 
-        // Forum Posts
+        // Add index
+        Schema::table('forums', function (Blueprint $table) {
+            $table->index('is_active');
+        });
+
+        // ==== Forum Posts ====
         Schema::table('forum_posts', function (Blueprint $table) {
             $table->dropForeign(['forum_id', 'user_id']);
             $table->dropColumn(['id', 'forum_id', 'user_id']);
@@ -157,7 +212,12 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // Forum Comments
+        // Add indexes for listing posts
+        Schema::table('forum_posts', function (Blueprint $table) {
+            $table->index(['forum_id', 'created_at']);
+        });
+
+        // ==== Forum Comments ====
         Schema::table('forum_comments', function (Blueprint $table) {
             $table->dropForeign(['forum_post_id', 'user_id', 'parent_id']);
             $table->dropColumn(['id', 'forum_post_id', 'user_id', 'parent_id']);
@@ -172,7 +232,12 @@ return new class extends Migration
             $table->foreign('parent_id')->references('id')->on('forum_comments')->onDelete('cascade');
         });
 
-        // Blogs
+        // Add indexes
+        Schema::table('forum_comments', function (Blueprint $table) {
+            $table->index(['forum_post_id', 'parent_id']);
+        });
+
+        // ==== Blogs ====
         Schema::table('blogs', function (Blueprint $table) {
             $table->dropForeign(['user_id', 'approved_by']);
             $table->dropColumn(['id', 'user_id', 'approved_by']);
@@ -185,7 +250,13 @@ return new class extends Migration
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
         });
 
-        // Blog Requests
+        // Add indexes
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->index(['is_published', 'published_at']);
+            $table->index('slug');
+        });
+
+        // ==== Blog Requests ====
         Schema::table('blog_requests', function (Blueprint $table) {
             $table->dropForeign(['user_id', 'approved_by']);
             $table->dropColumn(['id', 'user_id', 'approved_by']);
@@ -198,7 +269,12 @@ return new class extends Migration
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
         });
 
-        // Events
+        // Add index
+        Schema::table('blog_requests', function (Blueprint $table) {
+            $table->index('status');
+        });
+
+        // ==== Events ====
         Schema::table('events', function (Blueprint $table) {
             $table->dropForeign(['organizer_id']);
             $table->dropColumn(['id', 'organizer_id']);
@@ -209,7 +285,13 @@ return new class extends Migration
             $table->foreign('organizer_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // Event Requests
+        // Add indexes
+        Schema::table('events', function (Blueprint $table) {
+            $table->index(['is_published', 'start_date']);
+            $table->index('slug');
+        });
+
+        // ==== Event Requests ====
         Schema::table('event_requests', function (Blueprint $table) {
             $table->dropForeign(['organizer_id', 'approved_by']);
             $table->dropColumn(['id', 'organizer_id', 'approved_by']);
@@ -222,15 +304,29 @@ return new class extends Migration
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
         });
 
-        // Reports
+        // Add index
+        Schema::table('event_requests', function (Blueprint $table) {
+            $table->index('status');
+        });
+
+        // ==== Reports (CRITICAL FIX: Handle polymorphic relations) ====
         Schema::table('reports', function (Blueprint $table) {
-            $table->dropForeign(['reported_by']);
-            $table->dropColumn(['id', 'reported_by']);
+            $table->dropForeign(['reported_by', 'reviewed_by']);
+            $table->dropColumn(['id', 'reported_by', 'reportable_id', 'reportable_type', 'reviewed_by']);
         });
         Schema::table('reports', function (Blueprint $table) {
             $table->uuid('id')->primary()->first();
             $table->uuid('reported_by')->after('id');
+            $table->uuidMorphs('reportable');
+            $table->uuid('reviewed_by')->nullable()->after('admin_notes');
             $table->foreign('reported_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('reviewed_by')->references('id')->on('users')->onDelete('set null');
+        });
+
+        // Add indexes
+        Schema::table('reports', function (Blueprint $table) {
+            $table->index('status');
+            $table->index(['reportable_type', 'reportable_id']);
         });
 
         // Re-enable foreign key checks
@@ -243,6 +339,6 @@ return new class extends Migration
     public function down(): void
     {
         // This migration is not reversible
-        throw new Exception('This migration cannot be reversed. Please restore from backup.');
+        throw new \Exception('This migration cannot be reversed. Please restore from backup.');
     }
 };
