@@ -1,14 +1,18 @@
 <x-app-layout>
+    <x-slot name="breadcrumbs">
+        <li><a href="{{ route('dashboard') }}" class="hover:text-gruvbox-light-blue dark:hover:text-gruvbox-dark-blue">Dashboard</a></li>
+        <li><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></li>
+        <li><a href="{{ route('forums.index') }}" class="hover:text-gruvbox-light-blue dark:hover:text-gruvbox-dark-blue">Forums</a></li>
+        <li><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></li>
+        <li><a href="{{ route('forums.show', $forum) }}" class="hover:text-gruvbox-light-blue dark:hover:text-gruvbox-dark-blue">{{ $forum->name }}</a></li>
+        <li><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></li>
+        <li class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 font-medium">{{ Str::limit($post->title, 30) }}</li>
+    </x-slot>
+
     <x-slot name="header">
-        <div class="flex items-center space-x-2">
-            <a href="{{ route('forums.show', $forum) }}" class="text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline">
-                {{ $forum->name }}
-            </a>
-            <span class="text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">/</span>
-            <h2 class="font-semibold text-2xl text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">
-                {{ $post->title }}
-            </h2>
-        </div>
+        <h2 class="font-semibold text-2xl text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">
+            {{ $post->title }}
+        </h2>
     </x-slot>
 
     @if(session('success'))
