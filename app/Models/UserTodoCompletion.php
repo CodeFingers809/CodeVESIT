@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class UserTodoCompletion extends Model
 {
+    use HasUuid;
+
     protected $table = 'user_todo_completion';
 
     protected $fillable = [

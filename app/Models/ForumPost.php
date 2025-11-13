@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class ForumPost extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
         'forum_id',
         'user_id',

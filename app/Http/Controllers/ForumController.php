@@ -13,7 +13,10 @@ class ForumController extends Controller
 {
     public function index(): View
     {
-        $forums = Forum::where('is_active', true)->withCount('posts')->get();
+        $forums = Forum::where('is_active', true)
+            ->withCount('posts')
+            ->with('latestPost')
+            ->get();
         return view('forums.index', compact('forums'));
     }
 

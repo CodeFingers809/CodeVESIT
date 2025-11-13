@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class StudyGroupMessage extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
         'study_group_id',
         'user_id',
