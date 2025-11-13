@@ -98,6 +98,21 @@
             <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Manage user roles and status</p>
         </a>
 
+        <a href="{{ route('admin.blogs') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-purple dark:hover:border-gruvbox-dark-purple transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Blogs</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Edit, delete, and feature published blogs</p>
+        </a>
+
+        <a href="{{ route('admin.events') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-aqua dark:hover:border-gruvbox-dark-aqua transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Events</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Edit, delete, and feature published events</p>
+        </a>
+
+        <a href="{{ route('admin.forums') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-yellow dark:hover:border-gruvbox-dark-yellow transition-colors">
+            <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Manage Forums</h4>
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Create, edit, and delete forum categories</p>
+        </a>
+
         <a href="{{ route('admin.database') }}" class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-orange dark:hover:border-gruvbox-dark-orange transition-colors">
             <h4 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-2">Database Overview</h4>
             <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">View database statistics</p>

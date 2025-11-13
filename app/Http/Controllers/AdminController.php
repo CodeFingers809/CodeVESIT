@@ -221,6 +221,109 @@ class AdminController extends Controller
         return back()->with('success', 'User deleted successfully!');
     }
 
+    // Blogs Management
+    public function blogs(): View
+    {
+        $blogs = Blog::with('user')->latest()->paginate(20);
+        return view('admin.blogs', compact('blogs'));
+    }
+
+    public function updateBlog(Request $request, Blog $blog)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'is_published' => 'boolean',
+        ]);
+
+        $blog->update($validated);
+
+        return back()->with('success', 'Blog updated successfully!');
+    }
+
+    public function toggleBlogFeature(Blog $blog)
+    {
+        $blog->update(['is_published' => !$blog->is_published]);
+        return back()->with('success', 'Blog visibility toggled!');
+    }
+
+    public function deleteBlog(Blog $blog)
+    {
+        $blog->delete();
+        return back()->with('success', 'Blog deleted successfully!');
+    }
+
+    // Events Management
+    public function events(): View
+    {
+        $events = Event::with('creator')->latest()->paginate(20);
+        return view('admin.events', compact('events'));
+    }
+
+    public function updateEvent(Request $request, Event $event)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'location' => 'nullable|string|max:255',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'is_featured' => 'boolean',
+        ]);
+
+        $event->update($validated);
+
+        return back()->with('success', 'Event updated successfully!');
+    }
+
+    public function toggleEventFeature(Event $event)
+    {
+        $event->update(['is_featured' => !$event->is_featured]);
+        return back()->with('success', 'Event featured status toggled!');
+    }
+
+    public function deleteEvent(Event $event)
+    {
+        $event->delete();
+        return back()->with('success', 'Event deleted successfully!');
+    }
+
+    // Forums Management
+    public function forums(): View
+    {
+        $forums = Forum::withCount('posts')->latest()->paginate(20);
+        return view('admin.forums', compact('forums'));
+    }
+
+    public function storeForum(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+        ]);
+
+        Forum::create($validated);
+
+        return back()->with('success', 'Forum created successfully!');
+    }
+
+    public function updateForum(Request $request, Forum $forum)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+        ]);
+
+        $forum->update($validated);
+
+        return back()->with('success', 'Forum updated successfully!');
+    }
+
+    public function deleteForum(Forum $forum)
+    {
+        $forum->delete();
+        return back()->with('success', 'Forum deleted successfully!');
+    }
+
     // Database Overview (Read-only)
     public function database(): View
     {
