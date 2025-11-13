@@ -38,14 +38,13 @@ class DashboardController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'type' => 'required|in:task,event,reminder',
+            'event_date' => 'required|date',
+            'priority' => 'required|in:low,medium,high',
         ]);
 
         auth()->user()->calendarEvents()->create($validated);
 
-        return redirect()->back()->with('success', 'Event created successfully!');
+        return redirect()->back()->with('success', 'Task created successfully!');
     }
 
     public function updateCalendarEvent(Request $request, $event)
@@ -53,17 +52,16 @@ class DashboardController extends Controller
         $calendarEvent = auth()->user()->calendarEvents()->findOrFail($event);
 
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-            'type' => 'required|in:task,event,reminder',
-            'is_completed' => 'boolean',
+            'event_date' => 'nullable|date',
+            'priority' => 'nullable|in:low,medium,high',
+            'is_completed' => 'nullable|boolean',
         ]);
 
-        $calendarEvent->update($validated);
+        $calendarEvent->update(array_filter($validated));
 
-        return redirect()->back()->with('success', 'Event updated successfully!');
+        return redirect()->back()->with('success', 'Task updated successfully!');
     }
 
     public function destroyCalendarEvent($event)

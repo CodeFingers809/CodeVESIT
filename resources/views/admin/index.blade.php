@@ -70,96 +70,33 @@
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <a href="{{ route('admin.study-groups') }}"
-           class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-blue dark:hover:border-gruvbox-dark-blue transition-colors">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 rounded-lg bg-gruvbox-light-blue/20 dark:bg-gruvbox-dark-blue/20">
-                    <svg class="w-6 h-6 text-gruvbox-light-blue dark:text-gruvbox-dark-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Study Groups</h3>
-                    <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Review requests</p>
-                </div>
-            </div>
-        </a>
+    <!-- Moderation Instructions -->
+    <div class="p-6 rounded-lg bg-gruvbox-light-yellow/20 dark:bg-gruvbox-dark-yellow/20 border border-gruvbox-light-yellow dark:border-gruvbox-dark-yellow">
+        <h3 class="text-lg font-bold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-3">Content Moderation</h3>
+        <p class="text-sm text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 mb-4">
+            To approve/reject content, access your database directly. Full admin UI pages coming soon.
+        </p>
 
-        <a href="{{ route('admin.blogs') }}"
-           class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-purple dark:hover:border-gruvbox-dark-purple transition-colors">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 rounded-lg bg-gruvbox-light-purple/20 dark:bg-gruvbox-dark-purple/20">
-                    <svg class="w-6 h-6 text-gruvbox-light-purple dark:text-gruvbox-dark-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Blogs</h3>
-                    <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Moderate submissions</p>
-                </div>
+        <div class="space-y-3">
+            <div>
+                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Study Groups (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">study_groups</code>)</p>
+                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'approved' or 'rejected'</p>
             </div>
-        </a>
 
-        <a href="{{ route('admin.events') }}"
-           class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-aqua dark:hover:border-gruvbox-dark-aqua transition-colors">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 rounded-lg bg-gruvbox-light-aqua/20 dark:bg-gruvbox-dark-aqua/20">
-                    <svg class="w-6 h-6 text-gruvbox-light-aqua dark:text-gruvbox-dark-aqua" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Events</h3>
-                    <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Approve event requests</p>
-                </div>
+            <div>
+                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Blogs (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">blog_requests</code>)</p>
+                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'approved' to publish, or 'rejected' with <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">rejection_reason</code></p>
             </div>
-        </a>
 
-        <a href="{{ route('admin.forums') }}"
-           class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-green dark:hover:border-gruvbox-dark-green transition-colors">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20">
-                    <svg class="w-6 h-6 text-gruvbox-light-green dark:text-gruvbox-dark-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Forums</h3>
-                    <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Manage forum categories</p>
-                </div>
+            <div>
+                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Events (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">event_requests</code>)</p>
+                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'approved' or 'rejected'</p>
             </div>
-        </a>
 
-        <a href="{{ route('admin.reports') }}"
-           class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-red dark:hover:border-gruvbox-dark-red transition-colors">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 rounded-lg bg-gruvbox-light-red/20 dark:bg-gruvbox-dark-red/20">
-                    <svg class="w-6 h-6 text-gruvbox-light-red dark:text-gruvbox-dark-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Reports</h3>
-                    <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Handle user reports</p>
-                </div>
+            <div>
+                <p class="text-sm font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Reports (table: <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-2 py-1 rounded text-xs">reports</code>)</p>
+                <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Review reported content and take action, then set <code class="bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 px-1 rounded">status</code> to 'resolved'</p>
             </div>
-        </a>
-
-        <a href="{{ route('admin.users') }}"
-           class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 hover:border-gruvbox-light-yellow dark:hover:border-gruvbox-dark-yellow transition-colors">
-            <div class="flex items-center space-x-4">
-                <div class="p-3 rounded-lg bg-gruvbox-light-yellow/20 dark:bg-gruvbox-dark-yellow/20">
-                    <svg class="w-6 h-6 text-gruvbox-light-yellow dark:text-gruvbox-dark-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Users</h3>
-                    <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Manage user accounts</p>
-                </div>
-            </div>
-        </a>
+        </div>
     </div>
 </x-app-layout>
