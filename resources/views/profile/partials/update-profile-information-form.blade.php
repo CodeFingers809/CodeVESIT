@@ -53,6 +53,47 @@
             @endif
         </div>
 
+        <div>
+            <label for="avatar_seed" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Avatar Seed</label>
+            <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 mb-2">Change this to get a different avatar. Leave empty to use your name.</p>
+            <div class="flex items-center gap-4">
+                <div class="flex-1">
+                    <input id="avatar_seed" name="avatar_seed" type="text" value="{{ old('avatar_seed', $user->avatar_seed) }}"
+                           placeholder="{{ $user->name }}"
+                           oninput="updateAvatarPreview()"
+                           class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0" />
+                    @error('avatar_seed')
+                        <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 mb-1">Preview</p>
+                    <img id="avatar_preview"
+                         src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode($user->avatar_seed ?: $user->name) }}"
+                         alt="Avatar Preview"
+                         class="w-16 h-16 rounded-full border-2 border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
+                </div>
+            </div>
+            <button type="button" onclick="generateRandomSeed()" class="mt-2 text-sm text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline">
+                Generate Random
+            </button>
+        </div>
+
+        <script>
+            function updateAvatarPreview() {
+                const input = document.getElementById('avatar_seed');
+                const preview = document.getElementById('avatar_preview');
+                const seed = input.value || '{{ $user->name }}';
+                preview.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
+            }
+
+            function generateRandomSeed() {
+                const randomSeed = Math.random().toString(36).substring(2, 15);
+                document.getElementById('avatar_seed').value = randomSeed;
+                updateAvatarPreview();
+            }
+        </script>
+
         <div class="flex items-center gap-4">
             <button type="submit" class="px-4 py-2 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold">
                 Save

@@ -43,6 +43,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/{studyGroup}/chat', [StudyGroupController::class, 'storeMessage'])->name('chat.store');
 
         Route::get('/{studyGroup}/calendar', [StudyGroupController::class, 'calendar'])->name('calendar');
+        Route::post('/{studyGroup}/calendar', [StudyGroupController::class, 'storeCalendarEvent'])->name('calendar.store');
+        Route::patch('/calendar/{event}', [StudyGroupController::class, 'updateCalendarEvent'])->name('calendar.update');
+        Route::patch('/calendar/{event}/toggle', [StudyGroupController::class, 'toggleCalendarEvent'])->name('calendar.toggle');
+        Route::delete('/calendar/{event}', [StudyGroupController::class, 'destroyCalendarEvent'])->name('calendar.destroy');
+
+        Route::get('/{studyGroup}/settings', [StudyGroupController::class, 'settings'])->name('settings');
+        Route::post('/{studyGroup}/moderators', [StudyGroupController::class, 'addModerator'])->name('moderators.add');
+        Route::delete('/{studyGroup}/moderators/{userId}', [StudyGroupController::class, 'removeModerator'])->name('moderators.remove');
 
         Route::post('/join', [StudyGroupController::class, 'join'])->name('join');
         Route::post('/{studyGroup}/leave', [StudyGroupController::class, 'leave'])->name('leave');

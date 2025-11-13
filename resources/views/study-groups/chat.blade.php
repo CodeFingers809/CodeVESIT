@@ -17,25 +17,7 @@
         </div>
     @endif
 
-    <!-- Channel Navigation -->
-    <div class="mb-6 flex gap-2 overflow-x-auto">
-        <a href="{{ route('study-groups.todos', $studyGroup) }}"
-           class="px-4 py-2 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 hover:bg-gruvbox-light-bg2 dark:hover:bg-gruvbox-dark-bg2 transition-colors whitespace-nowrap">
-            Todos
-        </a>
-        <a href="{{ route('study-groups.announcements', $studyGroup) }}"
-           class="px-4 py-2 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 hover:bg-gruvbox-light-bg2 dark:hover:bg-gruvbox-dark-bg2 transition-colors whitespace-nowrap">
-            Announcements
-        </a>
-        <a href="{{ route('study-groups.chat', $studyGroup) }}"
-           class="px-4 py-2 rounded-lg bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 whitespace-nowrap">
-            Chat
-        </a>
-        <a href="{{ route('calendar.index') }}"
-           class="px-4 py-2 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 hover:bg-gruvbox-light-bg2 dark:hover:bg-gruvbox-dark-bg2 transition-colors whitespace-nowrap">
-            My Calendar
-        </a>
-    </div>
+    @include('study-groups.partials.navigation-tabs')
 
     <div class="flex flex-col h-[calc(100vh-300px)]">
         <!-- Messages Container -->

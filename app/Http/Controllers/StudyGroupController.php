@@ -6,6 +6,7 @@ use App\Models\StudyGroup;
 use App\Models\StudyGroupTodo;
 use App\Models\StudyGroupAnnouncement;
 use App\Models\StudyGroupMessage;
+use App\Models\StudyGroupCalendarEvent;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -227,13 +228,139 @@ class StudyGroupController extends Controller
         return back();
     }
 
-    // Calendar (shows in personal calendar section)
+    // Calendar
     public function calendar(StudyGroup $studyGroup): View
     {
         if (!$studyGroup->isMember(auth()->user())) {
             abort(403);
         }
 
-        return redirect()->route('calendar.index');
+        $events = $studyGroup->calendarEvents()
+            ->with('creator')
+            ->orderBy('event_date', 'asc')
+            ->get();
+        $isModerator = $studyGroup->isModerator(auth()->user());
+
+        return view('study-groups.calendar', compact('studyGroup', 'events', 'isModerator'));
+    }
+
+    public function storeCalendarEvent(Request $request, StudyGroup $studyGroup)
+    {
+        if (!$studyGroup->isModerator(auth()->user())) {
+            abort(403, 'Only moderators can create calendar events.');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'event_date' => 'required|date',
+            'priority' => 'required|in:low,medium,high',
+        ]);
+
+        $studyGroup->calendarEvents()->create([
+            ...$validated,
+            'created_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Calendar event created successfully!');
+    }
+
+    public function updateCalendarEvent(Request $request, StudyGroupCalendarEvent $event)
+    {
+        if (!$event->studyGroup->isModerator(auth()->user())) {
+            abort(403, 'Only moderators can edit calendar events.');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'event_date' => 'required|date',
+            'priority' => 'required|in:low,medium,high',
+        ]);
+
+        $event->update($validated);
+
+        return back()->with('success', 'Calendar event updated successfully!');
+    }
+
+    public function toggleCalendarEvent(StudyGroupCalendarEvent $event)
+    {
+        if (!$event->studyGroup->isMember(auth()->user())) {
+            abort(403);
+        }
+
+        $event->update([
+            'is_completed' => !$event->is_completed,
+        ]);
+
+        return back()->with('success', 'Event status updated!');
+    }
+
+    public function destroyCalendarEvent(StudyGroupCalendarEvent $event)
+    {
+        if (!$event->studyGroup->isModerator(auth()->user())) {
+            abort(403, 'Only moderators can delete calendar events.');
+        }
+
+        $event->delete();
+
+        return back()->with('success', 'Calendar event deleted successfully!');
+    }
+
+    // Settings (moderators only)
+    public function settings(StudyGroup $studyGroup): View
+    {
+        if (!$studyGroup->isMember(auth()->user())) {
+            abort(403);
+        }
+
+        $isModerator = $studyGroup->isModerator(auth()->user());
+        $isCreator = $studyGroup->created_by === auth()->id();
+        $members = $studyGroup->members()->withPivot('created_at')->get();
+        $moderators = $studyGroup->moderators()->get();
+
+        return view('study-groups.settings', compact('studyGroup', 'isModerator', 'isCreator', 'members', 'moderators'));
+    }
+
+    public function addModerator(Request $request, StudyGroup $studyGroup)
+    {
+        if ($studyGroup->created_by !== auth()->id()) {
+            abort(403, 'Only the group creator can add moderators.');
+        }
+
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $userId = $validated['user_id'];
+
+        // Check if user is a member
+        if (!$studyGroup->isMember(\App\Models\User::find($userId))) {
+            return back()->withErrors(['user_id' => 'User must be a member of the group first.']);
+        }
+
+        // Check if already a moderator
+        if ($studyGroup->isModerator(\App\Models\User::find($userId))) {
+            return back()->withErrors(['user_id' => 'User is already a moderator.']);
+        }
+
+        $studyGroup->moderators()->attach($userId, ['assigned_by' => auth()->id()]);
+
+        return back()->with('success', 'Moderator added successfully!');
+    }
+
+    public function removeModerator(Request $request, StudyGroup $studyGroup, $userId)
+    {
+        if ($studyGroup->created_by !== auth()->id()) {
+            abort(403, 'Only the group creator can remove moderators.');
+        }
+
+        if ($studyGroup->created_by == $userId) {
+            return back()->withErrors(['error' => 'Cannot remove creator as moderator.']);
+        }
+
+        $studyGroup->moderators()->detach($userId);
+
+        return back()->with('success', 'Moderator removed successfully!');
     }
 }
