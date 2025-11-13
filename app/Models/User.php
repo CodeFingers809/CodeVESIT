@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'bio',
         'avatar_seed',
         'is_active',
+        'email_notifications',
     ];
 
     protected $hidden = [
@@ -36,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'email_notifications' => 'boolean',
         ];
     }
 

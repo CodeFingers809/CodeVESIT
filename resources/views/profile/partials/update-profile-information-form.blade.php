@@ -94,6 +94,15 @@
             }
         </script>
 
+        <div>
+            <label class="flex items-center">
+                <input type="checkbox" name="email_notifications" value="1" {{ old('email_notifications', $user->email_notifications ?? true) ? 'checked' : '' }}
+                       class="w-4 h-4 text-gruvbox-light-blue dark:text-gruvbox-dark-blue border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 rounded">
+                <span class="ml-2 text-sm text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Receive email notifications for study group announcements</span>
+            </label>
+            <p class="mt-1 text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Uncheck this to stop receiving email notifications from your study groups</p>
+        </div>
+
         <div class="flex items-center gap-4">
             <button type="submit" class="px-4 py-2 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold">
                 Save
