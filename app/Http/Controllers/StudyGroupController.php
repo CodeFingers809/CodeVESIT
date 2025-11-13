@@ -196,6 +196,17 @@ class StudyGroupController extends Controller
         return back()->with('success', 'Announcement posted!');
     }
 
+    public function destroyAnnouncement(StudyGroup $studyGroup, StudyGroupAnnouncement $announcement)
+    {
+        if (!$studyGroup->isModerator(auth()->user()) || $announcement->created_by !== auth()->id()) {
+            abort(403, 'Only the creator can delete this announcement.');
+        }
+
+        $announcement->delete();
+
+        return back()->with('success', 'Announcement deleted successfully!');
+    }
+
     // Chat
     public function chat(StudyGroup $studyGroup): View
     {

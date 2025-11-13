@@ -172,31 +172,6 @@
 
                     <div class="py-6">
                         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <!-- Success Message -->
-                            @if (session('success'))
-                                <div class="mb-4 p-4 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20 border border-gruvbox-light-green dark:border-gruvbox-dark-green">
-                                    <p class="text-gruvbox-light-green dark:text-gruvbox-dark-green font-medium">{{ session('success') }}</p>
-                                </div>
-                            @endif
-
-                            <!-- Error Message -->
-                            @if (session('error'))
-                                <div class="mb-4 p-4 rounded-lg bg-gruvbox-light-red/20 dark:bg-gruvbox-dark-red/20 border border-gruvbox-light-red dark:border-gruvbox-dark-red">
-                                    <p class="text-gruvbox-light-red dark:text-gruvbox-dark-red font-medium">{{ session('error') }}</p>
-                                </div>
-                            @endif
-
-                            <!-- Error Messages -->
-                            @if ($errors->any())
-                                <div class="mb-4 p-4 rounded-lg bg-gruvbox-light-red/20 dark:bg-gruvbox-dark-red/20 border border-gruvbox-light-red dark:border-gruvbox-dark-red">
-                                    <ul class="list-disc list-inside text-gruvbox-light-red dark:text-gruvbox-dark-red">
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
                             {{ $slot }}
                         </div>
                     </div>
@@ -205,8 +180,8 @@
         </div>
 
         <!-- Overlay for mobile sidebar -->
-        <div 
-            x-show="sidebarOpen" 
+        <div
+            x-show="sidebarOpen"
             @click="sidebarOpen = false"
             x-transition:enter="transition-opacity ease-linear duration-300"
             x-transition:enter-start="opacity-0"
@@ -217,5 +192,67 @@
             class="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
             style="display: none;"
         ></div>
+
+        <!-- Toast Notifications Container -->
+        <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2" style="max-width: 320px;"></div>
+
+        <!-- Toast Notification Script -->
+        <script>
+            function showToast(message, type = 'success') {
+                const container = document.getElementById('toast-container');
+                const toast = document.createElement('div');
+
+                const colors = {
+                    success: 'bg-gruvbox-light-green dark:bg-gruvbox-dark-green',
+                    error: 'bg-gruvbox-light-red dark:bg-gruvbox-dark-red',
+                    warning: 'bg-gruvbox-light-yellow dark:bg-gruvbox-dark-yellow',
+                    info: 'bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue'
+                };
+
+                const icons = {
+                    success: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>',
+                    error: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>',
+                    warning: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>',
+                    info: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+                };
+
+                toast.className = `${colors[type]} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 transform transition-all duration-300 ease-out opacity-0 translate-x-8`;
+                toast.innerHTML = `
+                    <div class="flex-shrink-0">${icons[type]}</div>
+                    <p class="flex-1 text-sm font-medium">${message}</p>
+                    <button onclick="this.parentElement.remove()" class="flex-shrink-0 hover:opacity-75">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                `;
+
+                container.appendChild(toast);
+
+                // Trigger animation
+                setTimeout(() => {
+                    toast.classList.remove('opacity-0', 'translate-x-8');
+                }, 10);
+
+                // Auto dismiss after 5 seconds
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'translate-x-8');
+                    setTimeout(() => toast.remove(), 300);
+                }, 5000);
+            }
+
+            // Show toasts for Laravel session messages
+            @if (session('success'))
+                showToast('{{ session('success') }}', 'success');
+            @endif
+
+            @if (session('error'))
+                showToast('{{ session('error') }}', 'error');
+            @endif
+
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    showToast('{{ $error }}', 'error');
+                @endforeach
+            @endif
+        </script>
     </body>
 </html>

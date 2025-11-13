@@ -60,7 +60,7 @@
         <div class="p-4 rounded-b-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border-x border-b border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
             <form action="{{ route('study-groups.chat.store', $studyGroup) }}" method="POST" class="flex gap-3">
                 @csrf
-                <textarea name="content" rows="1" required
+                <textarea name="message" rows="1" required
                           placeholder="Type your message..."
                           class="flex-1 px-3 py-2 rounded-lg bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 resize-none"
                           onkeydown="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); this.form.submit(); }"></textarea>
