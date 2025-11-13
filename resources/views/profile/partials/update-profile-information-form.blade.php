@@ -54,6 +54,16 @@
         </div>
 
         <div>
+            <label for="bio" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Bio</label>
+            <textarea id="bio" name="bio" rows="4" maxlength="500" placeholder="Tell us about yourself..."
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 resize-none">{{ old('bio', $user->bio) }}</textarea>
+            <p class="mt-1 text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Optional. Maximum 500 characters.</p>
+            @error('bio')
+                <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
             <label for="avatar_seed" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Avatar Seed</label>
             <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 mb-2">Change this to get a different avatar. Leave empty to use your name.</p>
             <div class="flex items-center gap-4">

@@ -54,7 +54,7 @@
                             <p class="mt-2 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
                         @enderror
                         <p class="mt-2 text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">
-                            Upload your blog as a Microsoft Word document (.docx format). Maximum file size: 10MB.
+                            Upload your blog as a Microsoft Word document (.docx format). Maximum file size: {{ $maxFileSize }}.
                         </p>
                     </div>
 

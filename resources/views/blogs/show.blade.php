@@ -40,8 +40,24 @@
         </div>
 
         <!-- Blog Content -->
-        <div class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
-            @if($blog->content)
+        <div class="p-8 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
+            @if($parsedContent)
+                <div class="prose prose-lg max-w-none">
+                    <div class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 leading-relaxed text-base">
+                        {!! $parsedContent !!}
+                    </div>
+                </div>
+                @if($blog->document_path)
+                    <div class="mt-8 pt-6 border-t border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
+                        <a href="{{ $blog->document_path }}" download class="inline-flex items-center px-4 py-2 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold text-sm">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
+                            Download Original Document
+                        </a>
+                    </div>
+                @endif
+            @elseif($blog->content)
                 <div class="prose prose-lg max-w-none">
                     <div class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 whitespace-pre-wrap leading-relaxed">
                         {{ $blog->content }}
@@ -53,7 +69,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                     </svg>
                     <p class="text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 mb-4">This blog is available as a document</p>
-                    <a href="{{ asset('storage/' . $blog->document_path) }}" download class="inline-flex items-center px-6 py-3 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                    <a href="{{ $blog->document_path }}" download class="inline-flex items-center px-6 py-3 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                         </svg>
