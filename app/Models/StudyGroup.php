@@ -103,11 +103,21 @@ class StudyGroup extends Model
 
     public function isModerator(User $user): bool
     {
+        // Admins have moderator access to all study groups
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $this->moderators()->where('user_id', $user->id)->exists();
     }
 
     public function isMember(User $user): bool
     {
+        // Admins have member access to all study groups
+        if ($user->isAdmin()) {
+            return true;
+        }
+
         return $this->members()->where('user_id', $user->id)->exists();
     }
 }

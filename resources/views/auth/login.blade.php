@@ -1,47 +1,60 @@
 <x-guest-layout>
     <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    @if (session('status'))
+        <div class="mb-4 p-3 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20 border border-gruvbox-light-green dark:border-gruvbox-dark-green">
+            <p class="text-sm text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ session('status') }}</p>
+        </div>
+    @endif
 
-    <form method="POST" action="{{ route('login') }}">
+    <h2 class="text-2xl font-bold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-6">Login</h2>
+
+    <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
         <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <label for="email" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Email</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            @error('email')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div>
+            <label for="password" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Password</label>
+            <input id="password" type="password" name="password" required autocomplete="current-password"
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            @error('password')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
+        <div class="flex items-center">
+            <input id="remember_me" type="checkbox" name="remember"
+                   class="w-4 h-4 rounded border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-blue dark:text-gruvbox-dark-blue focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue">
+            <label for="remember_me" class="ml-2 text-sm text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Remember me</label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                <a href="{{ route('password.request') }}" class="text-sm text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline">
+                    Forgot your password?
                 </a>
             @endif
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
+            <button type="submit" class="w-full sm:w-auto px-6 py-2 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                Log in
+            </button>
+        </div>
+
+        <div class="text-center mt-6 pt-6 border-t border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">
+                Don't have an account?
+                <a href="{{ route('register') }}" class="text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline font-semibold">Register</a>
+            </p>
         </div>
     </form>
 </x-guest-layout>

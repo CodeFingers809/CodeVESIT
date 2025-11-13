@@ -1,26 +1,35 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+    <h2 class="text-2xl font-bold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-6">Register</h2>
+
+    <form method="POST" action="{{ route('register') }}" class="space-y-4">
         @csrf
 
         <!-- Name -->
         <div>
-            <x-input-label for="name" :value="__('Full Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+            <label for="name" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Full Name</label>
+            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            @error('name')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('College Email (@ves.ac.in)')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="yourname@ves.ac.in" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Must be a valid @ves.ac.in email address</p>
+        <div>
+            <label for="email" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">College Email (@ves.ac.in)</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username" placeholder="yourname@ves.ac.in"
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            <p class="mt-1 text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">Must be a valid @ves.ac.in email address</p>
+            @error('email')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Department -->
-        <div class="mt-4">
-            <x-input-label for="department" :value="__('Department')" />
-            <select id="department" name="department" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
+        <div>
+            <label for="department" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Department</label>
+            <select id="department" name="department" required
+                    class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue">
                 <option value="">Select Department</option>
                 <option value="Computer Engineering" {{ old('department') == 'Computer Engineering' ? 'selected' : '' }}>Computer Engineering</option>
                 <option value="Information Technology" {{ old('department') == 'Information Technology' ? 'selected' : '' }}>Information Technology</option>
@@ -29,70 +38,88 @@
                 <option value="Electronics Engineering" {{ old('department') == 'Electronics Engineering' ? 'selected' : '' }}>Electronics & Computer Science</option>
                 <option value="Instrumentation Engineering" {{ old('department') == 'Instrumentation Engineering' ? 'selected' : '' }}>Automation & Robotics</option>
             </select>
-            <x-input-error :messages="$errors->get('department')" class="mt-2" />
+            @error('department')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Year -->
-        <div class="mt-4">
-            <x-input-label for="year" :value="__('Year')" />
-            <select id="year" name="year" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" required>
+        <div>
+            <label for="year" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Year</label>
+            <select id="year" name="year" required
+                    class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue">
                 <option value="">Select Year</option>
                 <option value="FE" {{ old('year') == 'FE' ? 'selected' : '' }}>First Year (FE)</option>
                 <option value="SE" {{ old('year') == 'SE' ? 'selected' : '' }}>Second Year (SE)</option>
                 <option value="TE" {{ old('year') == 'TE' ? 'selected' : '' }}>Third Year (TE)</option>
                 <option value="BE" {{ old('year') == 'BE' ? 'selected' : '' }}>Final Year (BE)</option>
             </select>
-            <x-input-error :messages="$errors->get('year')" class="mt-2" />
+            @error('year')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Division -->
-        <div class="mt-4">
-            <x-input-label for="division" :value="__('Division')" />
-            <x-text-input id="division" class="block mt-1 w-full" type="text" name="division" :value="old('division')" required placeholder="e.g., A, B, C" />
-            <x-input-error :messages="$errors->get('division')" class="mt-2" />
+        <div>
+            <label for="division" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Division</label>
+            <input id="division" type="text" name="division" value="{{ old('division') }}" required placeholder="e.g., A, B, C"
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            @error('division')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Roll Number -->
-        <div class="mt-4">
-            <x-input-label for="roll_number" :value="__('Roll Number')" />
-            <x-text-input id="roll_number" class="block mt-1 w-full" type="text" name="roll_number" :value="old('roll_number')" required />
-            <x-input-error :messages="$errors->get('roll_number')" class="mt-2" />
+        <div>
+            <label for="roll_number" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Roll Number</label>
+            <input id="roll_number" type="text" name="roll_number" value="{{ old('roll_number') }}" required
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            @error('roll_number')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Bio (Optional) -->
-        <div class="mt-4">
-            <x-input-label for="bio" :value="__('Bio (Optional)')" />
-            <textarea id="bio" name="bio" rows="3" class="block mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm" placeholder="Tell us about yourself...">{{ old('bio') }}</textarea>
-            <x-input-error :messages="$errors->get('bio')" class="mt-2" />
+        <div>
+            <label for="bio" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Bio (Optional)</label>
+            <textarea id="bio" name="bio" rows="3" placeholder="Tell us about yourself..."
+                      class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 resize-none focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue">{{ old('bio') }}</textarea>
+            @error('bio')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div>
+            <label for="password" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Password</label>
+            <input id="password" type="password" name="password" required autocomplete="new-password"
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            @error('password')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <div>
+            <label for="password_confirmation" class="block text-sm font-medium text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-1">Confirm Password</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
+                   class="w-full px-3 py-2 rounded-lg bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3 text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 focus:outline-none focus:ring-2 focus:ring-gruvbox-light-blue dark:focus:ring-gruvbox-dark-blue" />
+            @error('password_confirmation')
+                <p class="mt-1 text-sm text-gruvbox-light-red dark:text-gruvbox-dark-red">{{ $message }}</p>
+            @enderror
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
+        <div class="pt-4">
+            <button type="submit" class="w-full px-6 py-2 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold">
+                Register
+            </button>
+        </div>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+        <div class="text-center pt-4 border-t border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
+            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">
+                Already have an account?
+                <a href="{{ route('login') }}" class="text-gruvbox-light-blue dark:text-gruvbox-dark-blue hover:underline font-semibold">Login</a>
+            </p>
         </div>
     </form>
 </x-guest-layout>
