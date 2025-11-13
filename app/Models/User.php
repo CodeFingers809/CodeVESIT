@@ -21,7 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'division',
         'roll_number',
         'bio',
-        'profile_image',
+        'avatar_seed',
         'is_active',
     ];
 
@@ -47,6 +47,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isModerator(): bool
     {
         return $this->role === 'moderator';
+    }
+
+    public function getAvatarUrl(): string
+    {
+        $seed = $this->avatar_seed ?? $this->id;
+        return "https://api.dicebear.com/7.x/bottts/svg?seed={$seed}";
     }
 
     // Study Group Relationships

@@ -59,6 +59,7 @@ class RegisteredUserController extends Controller
             'division' => $request->division,
             'roll_number' => $request->roll_number,
             'bio' => $request->bio,
+            'avatar_seed' => \Illuminate\Support\Str::random(16),
             'role' => 'user',
         ]);
 

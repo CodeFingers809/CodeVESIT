@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('division')->nullable();
             $table->string('roll_number')->nullable();
             $table->text('bio')->nullable();
-            $table->string('profile_image')->nullable();
+            $table->string('avatar_seed')->nullable();
             $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
