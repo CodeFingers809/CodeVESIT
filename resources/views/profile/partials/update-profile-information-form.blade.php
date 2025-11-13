@@ -69,7 +69,7 @@
                 <div class="flex flex-col items-center">
                     <p class="text-xs text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 mb-1">Preview</p>
                     <img id="avatar_preview"
-                         src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode($user->avatar_seed ?: $user->name) }}"
+                         src="https://api.dicebear.com/7.x/bottts/svg?seed={{ urlencode($user->avatar_seed ?: $user->name) }}"
                          alt="Avatar Preview"
                          class="w-16 h-16 rounded-full border-2 border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
                 </div>
@@ -84,7 +84,7 @@
                 const input = document.getElementById('avatar_seed');
                 const preview = document.getElementById('avatar_preview');
                 const seed = input.value || '{{ $user->name }}';
-                preview.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(seed)}`;
+                preview.src = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(seed)}`;
             }
 
             function generateRandomSeed() {

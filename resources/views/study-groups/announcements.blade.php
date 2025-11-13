@@ -47,13 +47,13 @@
                             <div>
                                 <h3 class="text-xl font-bold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ $announcement->title }}</h3>
                                 <div class="flex items-center text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 mt-1">
-                                    <span class="font-medium">{{ $announcement->user->name }}</span>
+                                    <span class="font-medium">{{ $announcement->creator->name }}</span>
                                     <span class="mx-2">•</span>
                                     <span>{{ $announcement->created_at->diffForHumans() }}</span>
                                 </div>
                             </div>
 
-                            @if($studyGroup->isModerator(auth()->user()) && $announcement->user_id === auth()->id())
+                            @if($studyGroup->isModerator(auth()->user()) && $announcement->created_by === auth()->id())
                                 <form action="{{ route('study-groups.announcements.destroy', [$studyGroup, $announcement]) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this announcement?')">
                                     @csrf
                                     @method('DELETE')

@@ -167,6 +167,7 @@ class StudyGroupController extends Controller
         }
 
         $announcements = $studyGroup->announcements()
+            ->with('creator')
             ->orderBy('is_pinned', 'desc')
             ->orderBy('created_at', 'desc')
             ->get();
