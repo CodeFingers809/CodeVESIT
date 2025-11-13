@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <form action="{{ route('calendar.complete', $event) }}" method="POST" class="inline">
+                        <form action="{{ route('calendar.events.update', $event) }}" method="POST" class="inline">
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="px-3 py-1 bg-gruvbox-light-green dark:bg-gruvbox-dark-green text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
@@ -65,7 +65,7 @@
                                 class="px-3 py-1 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
                             Edit
                         </button>
-                        <form action="{{ route('calendar.destroy', $event) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this task?')">
+                        <form action="{{ route('calendar.events.destroy', $event) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this task?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="px-3 py-1 bg-gruvbox-light-red dark:bg-gruvbox-dark-red text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
@@ -114,7 +114,7 @@
         <div class="bg-gruvbox-light-bg0 dark:bg-gruvbox-dark-bg0 rounded-lg p-6 max-w-md w-full mx-4">
             <h3 class="text-xl font-bold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 mb-4">Add New Task</h3>
 
-            <form action="{{ route('calendar.store') }}" method="POST">
+            <form action="{{ route('calendar.events.store') }}" method="POST">
                 @csrf
                 <div class="space-y-4">
                     <div>
@@ -214,7 +214,7 @@
 
     <script>
         function openEditModal(event) {
-            document.getElementById('editEventForm').action = `/calendar/${event.id}`;
+            document.getElementById('editEventForm').action = `/calendar/events/${event.id}`;
             document.getElementById('edit_title').value = event.title;
             document.getElementById('edit_description').value = event.description || '';
             document.getElementById('edit_event_date').value = event.event_date.replace(' ', 'T').substring(0, 16);
