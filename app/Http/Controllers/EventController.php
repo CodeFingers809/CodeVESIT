@@ -11,11 +11,13 @@ class EventController extends Controller
 {
     public function index(): View
     {
-        $upcomingEvents = Event::where('start_date', '>=', now())
+        $upcomingEvents = Event::whereNotNull('approved_by')
+            ->where('start_date', '>=', now())
             ->orderBy('start_date')
             ->get();
 
-        $pastEvents = Event::where('end_date', '<', now())
+        $pastEvents = Event::whereNotNull('approved_by')
+            ->where('end_date', '<', now())
             ->orderBy('start_date', 'desc')
             ->limit(5)
             ->get();

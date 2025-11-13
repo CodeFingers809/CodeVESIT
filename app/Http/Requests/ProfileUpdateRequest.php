@@ -26,6 +26,7 @@ class ProfileUpdateRequest extends FormRequest
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
             'avatar_seed' => ['nullable', 'string', 'max:255'],
+            'email_notifications' => ['nullable', 'boolean'],
         ];
     }
 }

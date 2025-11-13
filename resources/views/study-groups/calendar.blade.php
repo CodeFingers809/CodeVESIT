@@ -58,14 +58,14 @@
                     </div>
 
                     <div class="flex gap-2 flex-wrap">
-                        <form action="{{ route('study-groups.calendar.toggle', $event) }}" method="POST" class="inline">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="px-3 py-1 bg-gruvbox-light-green dark:bg-gruvbox-dark-green text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
-                                Complete
-                            </button>
-                        </form>
                         @if($isModerator)
+                            <form action="{{ route('study-groups.calendar.toggle', $event) }}" method="POST" class="inline">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="px-3 py-1 bg-gruvbox-light-green dark:bg-gruvbox-dark-green text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
+                                    Complete
+                                </button>
+                            </form>
                             <button onclick="openEditModal({{ json_encode($event) }})"
                                     class="px-3 py-1 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded text-sm hover:opacity-90 transition-opacity">
                                 Edit
@@ -77,6 +77,8 @@
                                     Delete
                                 </button>
                             </form>
+                        @else
+                            <p class="text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 italic">Auto-completes when time passes</p>
                         @endif
                     </div>
                 </div>

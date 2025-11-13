@@ -188,10 +188,17 @@ class StudyGroupController extends Controller
             'is_pinned' => 'boolean',
         ]);
 
-        $studyGroup->announcements()->create([
+        $announcement = $studyGroup->announcements()->create([
             ...$validated,
             'created_by' => auth()->id(),
         ]);
+
+        // Send email notifications to all group members except the creator
+        foreach ($studyGroup->members as $member) {
+            if ($member->id !== auth()->id()) {
+                $member->notify(new \App\Notifications\AnnouncementCreated($announcement));
+            }
+        }
 
         return back()->with('success', 'Announcement posted!');
     }
@@ -247,6 +254,12 @@ class StudyGroupController extends Controller
             abort(403);
         }
 
+        // Auto-complete events that have passed their date
+        $studyGroup->calendarEvents()
+            ->where('is_completed', false)
+            ->where('event_date', '<', now())
+            ->update(['is_completed' => true]);
+
         $events = $studyGroup->calendarEvents()
             ->with('creator')
             ->orderBy('event_date', 'asc')
@@ -297,8 +310,8 @@ class StudyGroupController extends Controller
 
     public function toggleCalendarEvent(StudyGroupCalendarEvent $event)
     {
-        if (!$event->studyGroup->isMember(auth()->user())) {
-            abort(403);
+        if (!$event->studyGroup->isModerator(auth()->user())) {
+            abort(403, 'Only moderators can manually toggle event completion.');
         }
 
         $event->update([
