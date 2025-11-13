@@ -61,13 +61,15 @@ class StudyGroupController extends Controller
         return view('study-groups.show', compact('studyGroup', 'isModerator'));
     }
 
-    public function join(Request $request, StudyGroup $studyGroup)
+    public function join(Request $request)
     {
         $validated = $request->validate([
             'join_code' => 'required|string|size:8',
         ]);
 
-        if ($studyGroup->join_code !== strtoupper($validated['join_code'])) {
+        $studyGroup = StudyGroup::where('join_code', strtoupper($validated['join_code']))->first();
+
+        if (!$studyGroup) {
             return back()->withErrors(['join_code' => 'Invalid join code.']);
         }
 

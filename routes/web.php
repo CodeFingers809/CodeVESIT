@@ -44,7 +44,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/{studyGroup}/calendar', [StudyGroupController::class, 'calendar'])->name('calendar');
 
-        Route::post('/{studyGroup}/join', [StudyGroupController::class, 'join'])->name('join');
+        Route::post('/join', [StudyGroupController::class, 'join'])->name('join');
         Route::post('/{studyGroup}/leave', [StudyGroupController::class, 'leave'])->name('leave');
     });
 
