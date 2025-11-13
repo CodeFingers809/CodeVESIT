@@ -69,11 +69,22 @@ class AdminController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
+        // Generate unique slug from title
+        $slug = \Illuminate\Support\Str::slug($request->title);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        // Ensure slug is unique
+        while (Blog::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
         // Create the blog from the request
         Blog::create([
             'user_id' => $request->user_id,
             'title' => $request->title,
-            'slug' => $request->slug,
+            'slug' => $slug,
             'excerpt' => $request->excerpt,
             'content' => $request->content,
             'featured_image' => $request->featured_image,

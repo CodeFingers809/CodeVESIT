@@ -53,7 +53,7 @@
                 @foreach($members as $member)
                     <div class="flex items-center justify-between p-3 rounded-lg bg-gruvbox-light-bg2 dark:bg-gruvbox-dark-bg2">
                         <div class="flex items-center gap-3">
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode($member->avatar_seed ?: $member->name) }}"
+                            <img src="https://api.dicebear.com/7.x/bottts/svg?seed={{ urlencode($member->avatar_seed ?: $member->name) }}"
                                  alt="{{ $member->name }}"
                                  class="w-10 h-10 rounded-full border-2 border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
                             <div>

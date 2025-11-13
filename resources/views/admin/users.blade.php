@@ -32,7 +32,7 @@
             <div class="p-6 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
                 <div class="flex justify-between items-start">
                     <div class="flex items-center gap-4">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed={{ urlencode($user->avatar_seed ?: $user->name) }}" alt="{{ $user->name }}" class="w-12 h-12 rounded-full">
+                        <img src="https://api.dicebear.com/7.x/bottts/svg?seed={{ urlencode($user->avatar_seed ?: $user->name) }}" alt="{{ $user->name }}" class="w-12 h-12 rounded-full">
                         <div>
                             <h3 class="text-lg font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ $user->name }}</h3>
                             <p class="text-sm text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2">{{ $user->email }}</p>
