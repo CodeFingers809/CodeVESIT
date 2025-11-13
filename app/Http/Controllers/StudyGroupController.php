@@ -247,6 +247,28 @@ class StudyGroupController extends Controller
         return back();
     }
 
+    public function reportMessage(Request $request, StudyGroup $studyGroup, $messageId)
+    {
+        if (!$studyGroup->isMember(auth()->user())) {
+            abort(403);
+        }
+
+        $message = $studyGroup->messages()->findOrFail($messageId);
+
+        $validated = $request->validate([
+            'reason' => 'required|string|max:1000',
+        ]);
+
+        \App\Models\Report::create([
+            'user_id' => auth()->id(),
+            'reportable_type' => \App\Models\StudyGroupMessage::class,
+            'reportable_id' => $message->id,
+            'reason' => $validated['reason'],
+        ]);
+
+        return back()->with('success', 'Message reported successfully!');
+    }
+
     // Calendar
     public function calendar(StudyGroup $studyGroup): View
     {
