@@ -12,32 +12,25 @@ class Event extends Model
 
     protected $fillable = [
         'title',
+        'slug',
+        'organizer_id',
         'description',
-        'location',
-        'image',
         'start_date',
         'end_date',
-        'organizer',
-        'contact_email',
-        'contact_phone',
-        'is_featured',
-        'created_by',
-        'approved_by',
+        'location',
+        'featured_image',
+        'max_participants',
+        'is_published',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'is_featured' => 'boolean',
+        'is_published' => 'boolean',
     ];
 
-    public function creator()
+    public function organizer()
     {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function approver()
-    {
-        return $this->belongsTo(User::class, 'approved_by');
+        return $this->belongsTo(User::class, 'organizer_id');
     }
 }

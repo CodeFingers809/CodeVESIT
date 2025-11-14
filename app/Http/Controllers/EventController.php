@@ -36,15 +36,13 @@ class EventController extends Controller
             'description' => 'required|string',
             'location' => 'nullable|string|max:255',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'organizer' => 'nullable|string|max:255',
-            'contact_email' => 'nullable|email',
-            'contact_phone' => 'nullable|string|max:20',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'max_participants' => 'nullable|integer|min:1',
         ]);
 
         EventRequest::create([
             ...$validated,
-            'user_id' => auth()->id(),
+            'organizer_id' => auth()->id(),
         ]);
 
         return redirect()->route('events.index')
