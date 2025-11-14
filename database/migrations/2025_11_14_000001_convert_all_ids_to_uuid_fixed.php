@@ -16,12 +16,8 @@ return new class extends Migration
         // This is a destructive operation and will clear all data
         // Only run this on a fresh database or after backing up
 
-        // Disable foreign key checks
-        if (DB::getDriverName() === 'mysql') {
-            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-        } else {
-            DB::statement('PRAGMA foreign_keys = OFF;');
-        }
+        // Note: We use dropIfExists which removes all constraints,
+        // so we don't need to disable foreign keys
 
         // ==== Drop and recreate auth tables with UUID support ====
         Schema::dropIfExists('password_reset_tokens');
@@ -357,13 +353,6 @@ return new class extends Migration
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
-
-        // Re-enable foreign key checks
-        if (DB::getDriverName() === 'mysql') {
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-        } else {
-            DB::statement('PRAGMA foreign_keys = ON;');
-        }
     }
 
     /**
