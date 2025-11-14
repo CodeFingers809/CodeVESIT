@@ -98,7 +98,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Parse DOCX content from Cloudinary URL
+     * Parse DOCX content from Cloudinary URL and convert to Gruvbox-styled HTML
      */
     private function parseDocx(string $url): ?string
     {
@@ -110,42 +110,168 @@ class BlogController extends Controller
             // Load the docx file
             $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
 
-            // Extract text content
-            $content = '';
-            foreach ($phpWord->getSections() as $section) {
-                foreach ($section->getElements() as $element) {
-                    if (method_exists($element, 'getText')) {
-                        $content .= $element->getText() . "\n\n";
-                    } elseif (method_exists($element, 'getElements')) {
-                        // For tables and other complex elements
-                        $content .= $this->extractText($element) . "\n\n";
-                    }
-                }
-            }
+            // Convert to HTML
+            $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
 
-            // Clean up
+            // Save to temporary HTML file
+            $htmlFile = tempnam(sys_get_temp_dir(), 'blog_html_');
+            $htmlWriter->save($htmlFile);
+
+            // Read the HTML content
+            $htmlContent = file_get_contents($htmlFile);
+
+            // Clean up temporary files
             @unlink($tempFile);
+            @unlink($htmlFile);
 
-            return nl2br(e(trim($content)));
+            // Apply Gruvbox styling
+            return $this->applyGruvboxStyling($htmlContent);
         } catch (\Exception $e) {
             return null;
         }
     }
 
     /**
-     * Recursively extract text from complex elements
+     * Apply Gruvbox theme styling to HTML content
      */
-    private function extractText($element): string
+    private function applyGruvboxStyling(string $html): string
     {
-        $text = '';
-        if (method_exists($element, 'getText')) {
-            $text .= $element->getText() . ' ';
+        // Extract body content only (remove HTML wrapper from PHPWord output)
+        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $html, $matches)) {
+            $html = $matches[1];
         }
-        if (method_exists($element, 'getElements')) {
-            foreach ($element->getElements() as $childElement) {
-                $text .= $this->extractText($childElement);
-            }
-        }
-        return $text;
+
+        // Define Gruvbox colors
+        $gruvboxStyles = '
+            <style>
+                .docx-content h1 {
+                    font-size: 2em;
+                    font-weight: 700;
+                    margin-top: 1.5em;
+                    margin-bottom: 0.75em;
+                    color: #fb4934; /* Gruvbox red */
+                    line-height: 1.2;
+                }
+                .docx-content h2 {
+                    font-size: 1.75em;
+                    font-weight: 600;
+                    margin-top: 1.25em;
+                    margin-bottom: 0.65em;
+                    color: #fabd2f; /* Gruvbox yellow */
+                    line-height: 1.3;
+                }
+                .docx-content h3 {
+                    font-size: 1.5em;
+                    font-weight: 600;
+                    margin-top: 1em;
+                    margin-bottom: 0.5em;
+                    color: #b8bb26; /* Gruvbox green */
+                    line-height: 1.3;
+                }
+                .docx-content h4 {
+                    font-size: 1.25em;
+                    font-weight: 600;
+                    margin-top: 1em;
+                    margin-bottom: 0.5em;
+                    color: #83a598; /* Gruvbox blue */
+                    line-height: 1.4;
+                }
+                .docx-content h5, .docx-content h6 {
+                    font-size: 1.1em;
+                    font-weight: 600;
+                    margin-top: 0.75em;
+                    margin-bottom: 0.5em;
+                    color: #d3869b; /* Gruvbox purple */
+                    line-height: 1.4;
+                }
+                .docx-content p {
+                    margin-bottom: 1em;
+                    line-height: 1.7;
+                }
+                .docx-content strong, .docx-content b {
+                    font-weight: 700;
+                    color: #fe8019; /* Gruvbox orange */
+                }
+                .docx-content em, .docx-content i {
+                    font-style: italic;
+                    color: #8ec07c; /* Gruvbox aqua */
+                }
+                .docx-content ul, .docx-content ol {
+                    margin-left: 1.5em;
+                    margin-bottom: 1em;
+                }
+                .docx-content li {
+                    margin-bottom: 0.5em;
+                    line-height: 1.6;
+                }
+                .docx-content ul {
+                    list-style-type: disc;
+                }
+                .docx-content ol {
+                    list-style-type: decimal;
+                }
+                .docx-content table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 1.5em 0;
+                }
+                .docx-content th {
+                    background-color: rgba(251, 73, 52, 0.1); /* Gruvbox red with opacity */
+                    font-weight: 600;
+                    padding: 0.75em;
+                    border: 1px solid rgba(235, 219, 178, 0.2);
+                    text-align: left;
+                }
+                .docx-content td {
+                    padding: 0.75em;
+                    border: 1px solid rgba(235, 219, 178, 0.2);
+                }
+                .docx-content tr:nth-child(even) {
+                    background-color: rgba(235, 219, 178, 0.05);
+                }
+                .docx-content blockquote {
+                    border-left: 4px solid #b8bb26; /* Gruvbox green */
+                    padding-left: 1em;
+                    margin: 1em 0;
+                    font-style: italic;
+                    opacity: 0.9;
+                }
+                .docx-content code {
+                    background-color: rgba(235, 219, 178, 0.1);
+                    padding: 0.2em 0.4em;
+                    border-radius: 3px;
+                    font-family: monospace;
+                    font-size: 0.9em;
+                    color: #fe8019; /* Gruvbox orange */
+                }
+                .docx-content pre {
+                    background-color: rgba(40, 40, 40, 0.3);
+                    padding: 1em;
+                    border-radius: 5px;
+                    overflow-x: auto;
+                    margin: 1em 0;
+                }
+                .docx-content pre code {
+                    background-color: transparent;
+                    padding: 0;
+                }
+                .docx-content a {
+                    color: #83a598; /* Gruvbox blue */
+                    text-decoration: underline;
+                }
+                .docx-content a:hover {
+                    color: #458588; /* Gruvbox blue dark */
+                }
+                .docx-content img {
+                    max-width: 100%;
+                    height: auto;
+                    margin: 1em 0;
+                    border-radius: 5px;
+                }
+            </style>
+        ';
+
+        // Wrap content in styled div
+        return $gruvboxStyles . '<div class="docx-content">' . $html . '</div>';
     }
 }
