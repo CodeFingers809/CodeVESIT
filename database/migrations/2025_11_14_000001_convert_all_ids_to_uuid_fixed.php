@@ -16,7 +16,7 @@ return new class extends Migration
         // This is a destructive operation and will clear all data
         // Only run this on a fresh database or after backing up
 
-        // Disable foreign key checks (works for both MySQL and SQLite)
+        // Disable foreign key checks
         if (DB::getDriverName() === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         } else {
@@ -27,14 +27,12 @@ return new class extends Migration
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
 
-        // Recreate password reset tokens with UUID
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
-        // Recreate sessions with UUID
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->uuid('user_id')->nullable()->index();
@@ -44,296 +42,326 @@ return new class extends Migration
             $table->integer('last_activity')->index();
         });
 
-        // ==== Users table ====
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('id');
-        });
-        Schema::table('users', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-        });
+        // ==== Recreate all tables with UUID primary keys ====
 
-        // Add indexes for performance
-        Schema::table('users', function (Blueprint $table) {
+        // Users table
+        Schema::dropIfExists('users');
+        Schema::create('users', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->string('role')->default('student');
+            $table->string('department')->nullable();
+            $table->integer('year')->nullable();
+            $table->string('profile_picture')->nullable();
+            $table->string('bio', 500)->nullable();
+            $table->boolean('email_notifications')->default(true);
+            $table->timestamps();
+
             $table->index('email');
             $table->index('role');
             $table->index(['department', 'year']);
         });
 
-        // ==== Study Groups ====
-        Schema::table('study_groups', function (Blueprint $table) {
-            $table->dropForeign(['created_by', 'approved_by']);
-            $table->dropColumn(['id', 'created_by', 'approved_by']);
-        });
-        Schema::table('study_groups', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('created_by')->after('description');
-            $table->uuid('approved_by')->nullable()->after('status');
+        // Study Groups
+        Schema::dropIfExists('study_groups');
+        Schema::create('study_groups', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->uuid('created_by');
+            $table->string('subject')->nullable();
+            $table->integer('max_members')->default(50);
+            $table->string('join_code')->unique();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->uuid('approved_by')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
-        });
-
-        // Add indexes
-        Schema::table('study_groups', function (Blueprint $table) {
             $table->index('status');
             $table->index('join_code');
             $table->index('is_active');
         });
 
-        // ==== Study Group Members ====
-        Schema::table('study_group_members', function (Blueprint $table) {
-            $table->dropForeign(['study_group_id', 'user_id']);
-            $table->dropColumn(['study_group_id', 'user_id']);
-        });
-        Schema::table('study_group_members', function (Blueprint $table) {
-            $table->uuid('study_group_id')->first();
-            $table->uuid('user_id')->after('study_group_id');
+        // Study Group Members
+        Schema::dropIfExists('study_group_members');
+        Schema::create('study_group_members', function (Blueprint $table) {
+            $table->uuid('study_group_id');
+            $table->uuid('user_id');
+            $table->enum('role', ['member', 'moderator'])->default('member');
+            $table->timestamp('joined_at')->useCurrent();
+
+            $table->primary(['study_group_id', 'user_id']);
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
-
-        // Add composite index for lookups
-        Schema::table('study_group_members', function (Blueprint $table) {
             $table->index(['study_group_id', 'user_id']);
         });
 
-        // ==== Study Group Moderators ====
-        Schema::table('study_group_moderators', function (Blueprint $table) {
-            $table->dropForeign(['study_group_id', 'user_id']);
-            $table->dropColumn(['study_group_id', 'user_id']);
-        });
-        Schema::table('study_group_moderators', function (Blueprint $table) {
-            $table->uuid('study_group_id')->first();
-            $table->uuid('user_id')->after('study_group_id');
+        // Study Group Moderators
+        Schema::dropIfExists('study_group_moderators');
+        Schema::create('study_group_moderators', function (Blueprint $table) {
+            $table->uuid('study_group_id');
+            $table->uuid('user_id');
+            $table->timestamp('appointed_at')->useCurrent();
+
+            $table->primary(['study_group_id', 'user_id']);
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
-
-        // Add composite index
-        Schema::table('study_group_moderators', function (Blueprint $table) {
             $table->index(['study_group_id', 'user_id']);
         });
 
-        // ==== Study Group Todos ====
-        Schema::table('study_group_todos', function (Blueprint $table) {
-            $table->dropForeign(['study_group_id']);
-            $table->dropColumn(['id', 'study_group_id']);
-        });
-        Schema::table('study_group_todos', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('study_group_id')->after('id');
+        // Study Group Todos
+        Schema::dropIfExists('study_group_todos');
+        Schema::create('study_group_todos', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('study_group_id');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->timestamp('due_date')->nullable();
+            $table->timestamps();
+
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
         });
 
-        // ==== User Todo Completion ====
-        Schema::table('user_todo_completions', function (Blueprint $table) {
-            $table->dropForeign(['user_id', 'study_group_todo_id']);
-            $table->dropColumn(['user_id', 'study_group_todo_id']);
-        });
-        Schema::table('user_todo_completions', function (Blueprint $table) {
-            $table->uuid('user_id')->first();
-            $table->uuid('study_group_todo_id')->after('user_id');
+        // User Todo Completions
+        Schema::dropIfExists('user_todo_completions');
+        Schema::create('user_todo_completions', function (Blueprint $table) {
+            $table->uuid('user_id');
+            $table->uuid('study_group_todo_id');
+            $table->boolean('is_completed')->default(false);
+            $table->timestamp('completed_at')->nullable();
+
+            $table->primary(['user_id', 'study_group_todo_id']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('study_group_todo_id')->references('id')->on('study_group_todos')->onDelete('cascade');
         });
 
-        // ==== Study Group Announcements ====
-        Schema::table('study_group_announcements', function (Blueprint $table) {
-            $table->dropForeign(['study_group_id', 'user_id']);
-            $table->dropColumn(['id', 'study_group_id', 'user_id']);
-        });
-        Schema::table('study_group_announcements', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('study_group_id')->after('id');
-            $table->uuid('user_id')->after('study_group_id');
+        // Study Group Announcements
+        Schema::dropIfExists('study_group_announcements');
+        Schema::create('study_group_announcements', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('study_group_id');
+            $table->uuid('user_id');
+            $table->string('title');
+            $table->text('content');
+            $table->timestamps();
+
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // ==== Study Group Messages ====
-        Schema::table('study_group_messages', function (Blueprint $table) {
-            $table->dropForeign(['study_group_id', 'user_id']);
-            $table->dropColumn(['id', 'study_group_id', 'user_id']);
-        });
-        Schema::table('study_group_messages', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('study_group_id')->after('id');
-            $table->uuid('user_id')->after('study_group_id');
+        // Study Group Messages
+        Schema::dropIfExists('study_group_messages');
+        Schema::create('study_group_messages', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('study_group_id');
+            $table->uuid('user_id');
+            $table->text('message');
+            $table->timestamps();
+
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
-        // ==== Study Group Calendar Events ====
-        Schema::table('study_group_calendar_events', function (Blueprint $table) {
-            $table->dropForeign(['study_group_id']);
-            $table->dropColumn(['id', 'study_group_id']);
-        });
-        Schema::table('study_group_calendar_events', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('study_group_id')->after('id');
+        // Study Group Calendar Events
+        Schema::dropIfExists('study_group_calendar_events');
+        Schema::create('study_group_calendar_events', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('study_group_id');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->timestamp('start_date');
+            $table->timestamp('end_date')->nullable();
+            $table->string('location')->nullable();
+            $table->timestamps();
+
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
         });
 
-        // ==== Personal Calendar Events ====
-        Schema::table('personal_calendar_events', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn(['id', 'user_id']);
-        });
-        Schema::table('personal_calendar_events', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('user_id')->after('id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
+        // Personal Calendar Events
+        Schema::dropIfExists('personal_calendar_events');
+        Schema::create('personal_calendar_events', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->timestamp('start_date');
+            $table->timestamp('end_date')->nullable();
+            $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
+            $table->boolean('is_completed')->default(false);
+            $table->timestamps();
 
-        // Add index for date queries
-        Schema::table('personal_calendar_events', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->index(['user_id', 'start_date']);
             $table->index('is_completed');
         });
 
-        // ==== Forums ====
-        Schema::table('forums', function (Blueprint $table) {
-            $table->dropColumn('id');
-        });
-        Schema::table('forums', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-        });
+        // Forums
+        Schema::dropIfExists('forums');
+        Schema::create('forums', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->string('slug')->unique();
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
 
-        // Add index
-        Schema::table('forums', function (Blueprint $table) {
             $table->index('is_active');
         });
 
-        // ==== Forum Posts ====
-        Schema::table('forum_posts', function (Blueprint $table) {
-            $table->dropForeign(['forum_id', 'user_id']);
-            $table->dropColumn(['id', 'forum_id', 'user_id']);
-        });
-        Schema::table('forum_posts', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('forum_id')->after('id');
-            $table->uuid('user_id')->after('forum_id');
+        // Forum Posts
+        Schema::dropIfExists('forum_posts');
+        Schema::create('forum_posts', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('forum_id');
+            $table->uuid('user_id');
+            $table->string('title');
+            $table->text('content');
+            $table->boolean('is_pinned')->default(false);
+            $table->timestamps();
+
             $table->foreign('forum_id')->references('id')->on('forums')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-        });
-
-        // Add indexes for listing posts
-        Schema::table('forum_posts', function (Blueprint $table) {
             $table->index(['forum_id', 'created_at']);
         });
 
-        // ==== Forum Comments ====
-        Schema::table('forum_comments', function (Blueprint $table) {
-            $table->dropForeign(['forum_post_id', 'user_id', 'parent_id']);
-            $table->dropColumn(['id', 'forum_post_id', 'user_id', 'parent_id']);
-        });
-        Schema::table('forum_comments', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('forum_post_id')->after('id');
-            $table->uuid('user_id')->after('forum_post_id');
-            $table->uuid('parent_id')->nullable()->after('content');
+        // Forum Comments
+        Schema::dropIfExists('forum_comments');
+        Schema::create('forum_comments', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('forum_post_id');
+            $table->uuid('user_id');
+            $table->text('content');
+            $table->uuid('parent_id')->nullable();
+            $table->timestamps();
+
             $table->foreign('forum_post_id')->references('id')->on('forum_posts')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('forum_comments')->onDelete('cascade');
-        });
-
-        // Add indexes
-        Schema::table('forum_comments', function (Blueprint $table) {
             $table->index(['forum_post_id', 'parent_id']);
         });
 
-        // ==== Blogs ====
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->dropForeign(['user_id', 'approved_by']);
-            $table->dropColumn(['id', 'user_id', 'approved_by']);
-        });
-        Schema::table('blogs', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('user_id')->after('id');
-            $table->uuid('approved_by')->nullable()->after('is_published');
+        // Blogs
+        Schema::dropIfExists('blogs');
+        Schema::create('blogs', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('content');
+            $table->string('featured_image')->nullable();
+            $table->string('document_path')->nullable();
+            $table->boolean('is_published')->default(false);
+            $table->timestamp('published_at')->nullable();
+            $table->uuid('approved_by')->nullable();
+            $table->integer('views')->default(0);
+            $table->timestamps();
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
-        });
-
-        // Add indexes
-        Schema::table('blogs', function (Blueprint $table) {
             $table->index(['is_published', 'published_at']);
             $table->index('slug');
         });
 
-        // ==== Blog Requests ====
-        Schema::table('blog_requests', function (Blueprint $table) {
-            $table->dropForeign(['user_id', 'approved_by']);
-            $table->dropColumn(['id', 'user_id', 'approved_by']);
-        });
-        Schema::table('blog_requests', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('user_id')->after('id');
-            $table->uuid('approved_by')->nullable()->after('status');
+        // Blog Requests
+        Schema::dropIfExists('blog_requests');
+        Schema::create('blog_requests', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->string('title');
+            $table->text('content');
+            $table->string('document_path')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->uuid('approved_by')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->timestamps();
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
-        });
-
-        // Add index
-        Schema::table('blog_requests', function (Blueprint $table) {
             $table->index('status');
         });
 
-        // ==== Events ====
-        Schema::table('events', function (Blueprint $table) {
-            $table->dropForeign(['organizer_id']);
-            $table->dropColumn(['id', 'organizer_id']);
-        });
-        Schema::table('events', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('organizer_id')->after('slug');
-            $table->foreign('organizer_id')->references('id')->on('users')->onDelete('cascade');
-        });
+        // Events
+        Schema::dropIfExists('events');
+        Schema::create('events', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->uuid('organizer_id');
+            $table->text('description');
+            $table->timestamp('start_date');
+            $table->timestamp('end_date')->nullable();
+            $table->string('location')->nullable();
+            $table->string('featured_image')->nullable();
+            $table->integer('max_participants')->nullable();
+            $table->boolean('is_published')->default(false);
+            $table->timestamps();
 
-        // Add indexes
-        Schema::table('events', function (Blueprint $table) {
+            $table->foreign('organizer_id')->references('id')->on('users')->onDelete('cascade');
             $table->index(['is_published', 'start_date']);
             $table->index('slug');
         });
 
-        // ==== Event Requests ====
-        Schema::table('event_requests', function (Blueprint $table) {
-            $table->dropForeign(['organizer_id', 'approved_by']);
-            $table->dropColumn(['id', 'organizer_id', 'approved_by']);
-        });
-        Schema::table('event_requests', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('organizer_id')->after('id');
-            $table->uuid('approved_by')->nullable()->after('status');
+        // Event Requests
+        Schema::dropIfExists('event_requests');
+        Schema::create('event_requests', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('organizer_id');
+            $table->string('title');
+            $table->text('description');
+            $table->timestamp('start_date');
+            $table->timestamp('end_date')->nullable();
+            $table->string('location')->nullable();
+            $table->integer('max_participants')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->uuid('approved_by')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->timestamps();
+
             $table->foreign('organizer_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('approved_by')->references('id')->on('users')->onDelete('set null');
-        });
-
-        // Add index
-        Schema::table('event_requests', function (Blueprint $table) {
             $table->index('status');
         });
 
-        // ==== Reports (CRITICAL FIX: Handle polymorphic relations) ====
-        Schema::table('reports', function (Blueprint $table) {
-            $table->dropForeign(['reported_by', 'reviewed_by']);
-            $table->dropColumn(['id', 'reported_by', 'reportable_id', 'reportable_type', 'reviewed_by']);
-        });
-        Schema::table('reports', function (Blueprint $table) {
-            $table->uuid('id')->primary()->first();
-            $table->uuid('reported_by')->after('id');
+        // Reports
+        Schema::dropIfExists('reports');
+        Schema::create('reports', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->uuid('reported_by');
             $table->uuidMorphs('reportable');
-            $table->uuid('reviewed_by')->nullable()->after('admin_notes');
+            $table->text('reason');
+            $table->enum('status', ['pending', 'reviewing', 'resolved', 'dismissed'])->default('pending');
+            $table->text('admin_notes')->nullable();
+            $table->uuid('reviewed_by')->nullable();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->timestamps();
+
             $table->foreign('reported_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('reviewed_by')->references('id')->on('users')->onDelete('set null');
-        });
-
-        // Add indexes
-        Schema::table('reports', function (Blueprint $table) {
             $table->index('status');
             $table->index(['reportable_type', 'reportable_id']);
         });
 
-        // Re-enable foreign key checks (works for both MySQL and SQLite)
+        // Notifications
+        Schema::dropIfExists('notifications');
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->string('type');
+            $table->uuidMorphs('notifiable');
+            $table->text('data');
+            $table->timestamp('read_at')->nullable();
+            $table->timestamps();
+
+            $table->index(['notifiable_type', 'notifiable_id']);
+        });
+
+        // Re-enable foreign key checks
         if (DB::getDriverName() === 'mysql') {
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         } else {
