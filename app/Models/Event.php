@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
         'title',
         'description',

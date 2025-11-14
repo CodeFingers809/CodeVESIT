@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class ForumComment extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
         'post_id',
         'user_id',

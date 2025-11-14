@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasUuid;
+
 use Illuminate\Database\Eloquent\Model;
 
 class StudyGroupAnnouncement extends Model
 {
+    use HasUuid;
+
     protected $fillable = [
         'study_group_id',
         'title',
