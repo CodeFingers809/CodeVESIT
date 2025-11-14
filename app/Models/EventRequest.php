@@ -11,36 +11,31 @@ class EventRequest extends Model
     use HasUuid;
 
     protected $fillable = [
-        'user_id',
+        'organizer_id',
         'title',
         'description',
         'location',
-        'image',
         'start_date',
         'end_date',
-        'organizer',
-        'contact_email',
-        'contact_phone',
+        'max_participants',
         'status',
+        'approved_by',
         'rejection_reason',
-        'reviewed_by',
-        'reviewed_at',
     ];
 
     protected $casts = [
         'start_date' => 'datetime',
         'end_date' => 'datetime',
-        'reviewed_at' => 'datetime',
     ];
 
-    public function user()
+    public function organizer()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'organizer_id');
     }
 
-    public function reviewer()
+    public function approver()
     {
-        return $this->belongsTo(User::class, 'reviewed_by');
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function isPending(): bool

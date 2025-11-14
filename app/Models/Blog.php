@@ -14,14 +14,13 @@ class Blog extends Model
         'user_id',
         'title',
         'slug',
-        'excerpt',
         'content',
         'featured_image',
         'document_path',
-        'views',
         'is_published',
         'published_at',
         'approved_by',
+        'views',
     ];
 
     protected $casts = [

@@ -13,17 +13,11 @@ class BlogRequest extends Model
     protected $fillable = [
         'user_id',
         'title',
-        'excerpt',
         'content',
-        'featured_image',
+        'document_path',
         'status',
+        'approved_by',
         'rejection_reason',
-        'reviewed_by',
-        'reviewed_at',
-    ];
-
-    protected $casts = [
-        'reviewed_at' => 'datetime',
     ];
 
     public function user()
@@ -31,9 +25,9 @@ class BlogRequest extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function reviewer()
+    public function approver()
     {
-        return $this->belongsTo(User::class, 'reviewed_by');
+        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function isPending(): bool
