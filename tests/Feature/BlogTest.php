@@ -25,7 +25,7 @@ class BlogTest extends TestCase
                 'getSecurePath' => fn() => 'https://cloudinary.com/blogs/test.docx'
             ]);
 
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
 
         $this->actingAs($student);
 
@@ -63,7 +63,7 @@ class BlogTest extends TestCase
                 'getSecurePath' => fn() => 'https://cloudinary.com/blogs/test.docx'
             ]);
 
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
 
         $this->actingAs($student);
 
@@ -89,7 +89,7 @@ class BlogTest extends TestCase
      */
     public function test_blog_file_size_limit_enforced(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
 
         $this->actingAs($student);
 
@@ -111,8 +111,8 @@ class BlogTest extends TestCase
      */
     public function test_admin_can_approve_blog_request(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $student = User::factory()->create(['role' => 'student']);
+        $admin = User::factory()->admin()->create();
+        $student = User::factory()->create([]);
 
         $blogRequest = BlogRequest::factory()->create([
             'user_id' => $student->id,
@@ -141,8 +141,8 @@ class BlogTest extends TestCase
      */
     public function test_admin_can_reject_blog_request(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $student = User::factory()->create(['role' => 'student']);
+        $admin = User::factory()->admin()->create();
+        $student = User::factory()->create([]);
 
         $blogRequest = BlogRequest::factory()->create([
             'user_id' => $student->id,
@@ -186,7 +186,7 @@ class BlogTest extends TestCase
      */
     public function test_unpublished_blogs_not_visible_to_users(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
         $blog = Blog::factory()->create([
             'is_published' => false,
             'title' => 'Unpublished Blog',
@@ -226,8 +226,8 @@ class BlogTest extends TestCase
      */
     public function test_student_can_only_see_own_blog_requests(): void
     {
-        $student1 = User::factory()->create(['role' => 'student']);
-        $student2 = User::factory()->create(['role' => 'student']);
+        $student1 = User::factory()->create([]);
+        $student2 = User::factory()->create([]);
 
         $blogRequest1 = BlogRequest::factory()->create([
             'user_id' => $student1->id,

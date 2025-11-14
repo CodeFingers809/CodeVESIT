@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Traits\HasUuid;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class StudyGroup extends Model
 {
-    use HasUuid;
+    use HasFactory, HasUuid;
 
     protected $fillable = [
         'name',
