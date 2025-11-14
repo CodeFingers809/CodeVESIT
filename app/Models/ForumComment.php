@@ -11,7 +11,7 @@ class ForumComment extends Model
     use HasUuid;
 
     protected $fillable = [
-        'post_id',
+        'forum_post_id',
         'user_id',
         'content',
         'parent_id',
@@ -19,7 +19,7 @@ class ForumComment extends Model
 
     public function post()
     {
-        return $this->belongsTo(ForumPost::class, 'post_id');
+        return $this->belongsTo(ForumPost::class, 'forum_post_id');
     }
 
     public function user()

@@ -37,7 +37,7 @@ class ForumPost extends Model
 
     public function comments()
     {
-        return $this->hasMany(ForumComment::class, 'post_id');
+        return $this->hasMany(ForumComment::class, 'forum_post_id');
     }
 
     public function reports()
