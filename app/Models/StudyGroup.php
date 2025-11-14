@@ -60,14 +60,13 @@ class StudyGroup extends Model
     public function members()
     {
         return $this->belongsToMany(User::class, 'study_group_members')
-            ->withTimestamps();
+            ->withPivot('role', 'joined_at');
     }
 
     public function moderators()
     {
         return $this->belongsToMany(User::class, 'study_group_moderators')
-            ->withPivot('assigned_by')
-            ->withTimestamps();
+            ->withPivot('appointed_at');
     }
 
     public function todos()

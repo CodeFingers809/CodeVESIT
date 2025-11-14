@@ -25,7 +25,7 @@
                         <h3 class="text-lg font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ $request->title }}</h3>
                         <p class="text-sm text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 mt-1">{{ $request->description }}</p>
                         <div class="mt-3 flex items-center gap-4 text-sm text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3">
-                            <span>Organizer: {{ $request->organizer }}</span>
+                            <span>Organizer: {{ $request->organizer->name }}</span>
                             <span>{{ $request->start_date->format('M d, Y') }}</span>
                             <span>Status: <span class="px-2 py-1 rounded text-xs {{ $request->status === 'approved' ? 'bg-gruvbox-light-green/20 text-gruvbox-light-green' : ($request->status === 'rejected' ? 'bg-gruvbox-light-red/20 text-gruvbox-light-red' : 'bg-gruvbox-light-yellow/20 text-gruvbox-light-yellow') }}">{{ ucfirst($request->status) }}</span></span>
                         </div>

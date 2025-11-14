@@ -85,9 +85,7 @@ class AdminController extends Controller
             'user_id' => $request->user_id,
             'title' => $request->title,
             'slug' => $slug,
-            'excerpt' => $request->excerpt,
             'content' => $request->content,
-            'featured_image' => $request->featured_image,
             'document_path' => $request->document_path,
             'is_published' => true,
             'published_at' => now(),
@@ -114,7 +112,7 @@ class AdminController extends Controller
     // Event Requests Management
     public function eventRequests(): View
     {
-        $eventRequests = EventRequest::with('user')->latest()->paginate(20);
+        $eventRequests = EventRequest::with('organizer')->latest()->paginate(20);
         return view('admin.event-requests', compact('eventRequests'));
     }
 
@@ -125,20 +123,28 @@ class AdminController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
+        // Generate unique slug from title
+        $slug = \Illuminate\Support\Str::slug($request->title);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        // Ensure slug is unique
+        while (Event::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $counter;
+            $counter++;
+        }
+
         // Create the event from the request
         Event::create([
             'title' => $request->title,
+            'slug' => $slug,
+            'organizer_id' => $request->organizer_id,
             'description' => $request->description,
-            'location' => $request->location,
-            'image' => $request->image,
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
-            'organizer' => $request->organizer,
-            'contact_email' => $request->contact_email,
-            'contact_phone' => $request->contact_phone,
-            'is_featured' => false,
-            'created_by' => $request->user_id,
-            'approved_by' => auth()->id(),
+            'location' => $request->location,
+            'max_participants' => $request->max_participants,
+            'is_published' => true,
         ]);
 
         return back()->with('success', 'Event request approved and published!');
@@ -255,7 +261,7 @@ class AdminController extends Controller
     // Events Management
     public function events(): View
     {
-        $events = Event::with('creator')->latest()->paginate(20);
+        $events = Event::with('organizer')->latest()->paginate(20);
         return view('admin.events', compact('events'));
     }
 
@@ -266,8 +272,8 @@ class AdminController extends Controller
             'description' => 'required|string',
             'location' => 'nullable|string|max:255',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'is_featured' => 'boolean',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'is_published' => 'boolean',
         ]);
 
         $event->update($validated);
@@ -277,8 +283,8 @@ class AdminController extends Controller
 
     public function toggleEventFeature(Event $event)
     {
-        $event->update(['is_featured' => !$event->is_featured]);
-        return back()->with('success', 'Event featured status toggled!');
+        $event->update(['is_published' => !$event->is_published]);
+        return back()->with('success', 'Event visibility toggled!');
     }
 
     public function deleteEvent(Event $event)
