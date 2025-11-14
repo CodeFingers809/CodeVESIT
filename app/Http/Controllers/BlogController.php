@@ -110,8 +110,15 @@ class BlogController extends Controller
             // Load the docx file
             $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempFile);
 
-            // Convert to HTML
+            // Create a temporary directory for extracted images
+            $tempDir = sys_get_temp_dir() . '/blog_' . uniqid();
+            mkdir($tempDir, 0777, true);
+
+            // Convert to HTML with image extraction
             $htmlWriter = new \PhpOffice\PhpWord\Writer\HTML($phpWord);
+
+            // Set the image directory for PHPWord
+            $htmlWriter->setImagesDirectory($tempDir);
 
             // Save to temporary HTML file
             $htmlFile = tempnam(sys_get_temp_dir(), 'blog_html_');
@@ -120,15 +127,74 @@ class BlogController extends Controller
             // Read the HTML content
             $htmlContent = file_get_contents($htmlFile);
 
+            // Convert images to base64 data URLs
+            $htmlContent = $this->convertImagesToBase64($htmlContent, $tempDir);
+
             // Clean up temporary files
             @unlink($tempFile);
             @unlink($htmlFile);
+            $this->deleteDirectory($tempDir);
 
             // Apply Gruvbox styling
             return $this->applyGruvboxStyling($htmlContent);
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * Convert image references in HTML to base64 data URLs
+     */
+    private function convertImagesToBase64(string $html, string $imageDir): string
+    {
+        // Find all image tags
+        preg_match_all('/<img[^>]+src=["\']([^"\']+)["\'][^>]*>/i', $html, $matches);
+
+        if (!empty($matches[0])) {
+            foreach ($matches[1] as $index => $imagePath) {
+                // Get the full path to the image
+                $fullPath = $imageDir . '/' . basename($imagePath);
+
+                if (file_exists($fullPath)) {
+                    // Read image and convert to base64
+                    $imageData = file_get_contents($fullPath);
+                    $imageType = mime_content_type($fullPath);
+                    $base64 = base64_encode($imageData);
+                    $dataUrl = "data:{$imageType};base64,{$base64}";
+
+                    // Replace the src attribute
+                    $html = str_replace($imagePath, $dataUrl, $html);
+                }
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Recursively delete a directory
+     */
+    private function deleteDirectory(string $dir): bool
+    {
+        if (!file_exists($dir)) {
+            return true;
+        }
+
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+        }
+
+        return rmdir($dir);
     }
 
     /**
