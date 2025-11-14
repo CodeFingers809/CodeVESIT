@@ -37,12 +37,12 @@ class DocumentServiceTest extends TestCase
      */
     public function test_valid_file_is_accepted(): void
     {
-        // Mock Cloudinary facade
+        // Mock Cloudinary facade with chained methods
         Cloudinary::shouldReceive('upload')
             ->once()
-            ->andReturn((object) [
-                'getSecurePath' => fn() => 'https://cloudinary.com/test/document.docx'
-            ]);
+            ->andReturnSelf()
+            ->shouldReceive('getSecurePath')
+            ->andReturn('https://cloudinary.com/test/document.docx');
 
         $file = UploadedFile::fake()->create('document.docx', 2000); // 2MB
 
@@ -57,14 +57,15 @@ class DocumentServiceTest extends TestCase
      */
     public function test_custom_folder_can_be_specified(): void
     {
+        // Mock Cloudinary facade with chained methods
         Cloudinary::shouldReceive('upload')
             ->once()
             ->with(Mockery::any(), Mockery::on(function ($options) {
                 return $options['folder'] === 'custom_folder';
             }))
-            ->andReturn((object) [
-                'getSecurePath' => fn() => 'https://cloudinary.com/custom_folder/document.docx'
-            ]);
+            ->andReturnSelf()
+            ->shouldReceive('getSecurePath')
+            ->andReturn('https://cloudinary.com/custom_folder/document.docx');
 
         $file = UploadedFile::fake()->create('document.docx', 1000);
 
@@ -78,14 +79,15 @@ class DocumentServiceTest extends TestCase
      */
     public function test_default_folder_is_blogs(): void
     {
+        // Mock Cloudinary facade with chained methods
         Cloudinary::shouldReceive('upload')
             ->once()
             ->with(Mockery::any(), Mockery::on(function ($options) {
                 return $options['folder'] === 'blogs';
             }))
-            ->andReturn((object) [
-                'getSecurePath' => fn() => 'https://cloudinary.com/blogs/document.docx'
-            ]);
+            ->andReturnSelf()
+            ->shouldReceive('getSecurePath')
+            ->andReturn('https://cloudinary.com/blogs/document.docx');
 
         $file = UploadedFile::fake()->create('document.docx', 1000);
 

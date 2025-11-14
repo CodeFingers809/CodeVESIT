@@ -101,19 +101,20 @@ class AuthenticationTest extends TestCase
     {
         $response = $this->post(route('register'), [
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test@ves.ac.in',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'department' => 'Computer',
-            'year' => '2',
-            'role' => 'student',
+            'department' => 'Computer Engineering',
+            'year' => 'SE',
+            'division' => 'A',
+            'roll_number' => '001',
         ]);
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard'));
 
         $this->assertDatabaseHas('users', [
-            'email' => 'test@example.com',
+            'email' => 'test@ves.ac.in',
             'name' => 'Test User',
         ]);
     }
@@ -125,12 +126,13 @@ class AuthenticationTest extends TestCase
     {
         $response = $this->post(route('register'), [
             'name' => 'Test User',
-            'email' => 'test@example.com',
+            'email' => 'test@ves.ac.in',
             'password' => 'password123',
             'password_confirmation' => 'different-password',
-            'department' => 'Computer',
-            'year' => '2',
-            'role' => 'student',
+            'department' => 'Computer Engineering',
+            'year' => 'SE',
+            'division' => 'A',
+            'roll_number' => '001',
         ]);
 
         $this->assertGuest();
@@ -142,16 +144,17 @@ class AuthenticationTest extends TestCase
      */
     public function test_registration_requires_unique_email(): void
     {
-        User::factory()->create(['email' => 'existing@example.com']);
+        User::factory()->create(['email' => 'existing@ves.ac.in']);
 
         $response = $this->post(route('register'), [
             'name' => 'Test User',
-            'email' => 'existing@example.com',
+            'email' => 'existing@ves.ac.in',
             'password' => 'password123',
             'password_confirmation' => 'password123',
-            'department' => 'Computer',
-            'year' => '2',
-            'role' => 'student',
+            'department' => 'Computer Engineering',
+            'year' => 'SE',
+            'division' => 'A',
+            'roll_number' => '001',
         ]);
 
         $this->assertGuest();

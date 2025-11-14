@@ -16,8 +16,8 @@ class AdminStudyGroupAccessTest extends TestCase
      */
     public function test_admin_can_access_any_study_group(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $creator = User::factory()->create(['role' => 'student']);
+        $admin = User::factory()->admin()->create();
+        $creator = User::factory()->create();
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -37,8 +37,8 @@ class AdminStudyGroupAccessTest extends TestCase
      */
     public function test_admin_is_considered_member_of_any_study_group(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $creator = User::factory()->create(['role' => 'student']);
+        $admin = User::factory()->admin()->create();
+        $creator = User::factory()->create();
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -53,8 +53,8 @@ class AdminStudyGroupAccessTest extends TestCase
      */
     public function test_admin_is_considered_moderator_of_any_study_group(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $creator = User::factory()->create(['role' => 'student']);
+        $admin = User::factory()->admin()->create();
+        $creator = User::factory()->create();
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -69,8 +69,8 @@ class AdminStudyGroupAccessTest extends TestCase
      */
     public function test_non_admin_cannot_access_study_group_without_membership(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $creator = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
+        $creator = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -90,8 +90,8 @@ class AdminStudyGroupAccessTest extends TestCase
      */
     public function test_regular_member_is_not_moderator(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $creator = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
+        $creator = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -113,7 +113,7 @@ class AdminStudyGroupAccessTest extends TestCase
      */
     public function test_creator_is_considered_moderator(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,

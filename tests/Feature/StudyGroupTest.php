@@ -18,7 +18,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_student_can_create_study_group_request(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
 
         $this->actingAs($student);
 
@@ -40,7 +40,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_study_groups_have_unique_join_codes(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
 
         $this->actingAs($student);
 
@@ -65,8 +65,8 @@ class StudyGroupTest extends TestCase
      */
     public function test_admin_can_approve_study_group_request(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $student = User::factory()->create(['role' => 'student']);
+        $admin = User::factory()->admin()->create();
+        $student = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $student->id,
@@ -90,8 +90,8 @@ class StudyGroupTest extends TestCase
      */
     public function test_admin_can_reject_study_group_request(): void
     {
-        $admin = User::factory()->create(['role' => 'admin']);
-        $student = User::factory()->create(['role' => 'student']);
+        $admin = User::factory()->admin()->create();
+        $student = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $student->id,
@@ -116,7 +116,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_student_can_join_study_group_with_code(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
         $studyGroup = StudyGroup::factory()->create([
             'status' => 'approved',
             'join_code' => 'ABC12345',
@@ -140,7 +140,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_invalid_join_code_rejected(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
 
         $this->actingAs($student);
 
@@ -156,8 +156,8 @@ class StudyGroupTest extends TestCase
      */
     public function test_only_members_can_view_study_group_details(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $creator = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create([]);
+        $creator = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -175,7 +175,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_moderators_can_create_announcements(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
             'status' => 'approved',
@@ -201,8 +201,8 @@ class StudyGroupTest extends TestCase
      */
     public function test_non_moderators_cannot_create_announcements(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
-        $member = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
+        $member = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -229,7 +229,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_study_group_breadcrumbs_are_consistent(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
             'status' => 'approved',
@@ -262,7 +262,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_creator_is_automatically_moderator(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
             'status' => 'approved',
@@ -276,8 +276,8 @@ class StudyGroupTest extends TestCase
      */
     public function test_members_can_leave_study_group(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
-        $member = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
+        $member = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
@@ -305,7 +305,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_study_groups_can_be_deactivated(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
             'status' => 'approved',
@@ -328,7 +328,7 @@ class StudyGroupTest extends TestCase
      */
     public function test_only_approved_study_groups_shown_in_index(): void
     {
-        $user = User::factory()->create(['role' => 'student']);
+        $user = User::factory()->create([]);
 
         $approvedGroup = StudyGroup::factory()->create([
             'status' => 'approved',

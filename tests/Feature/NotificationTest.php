@@ -29,7 +29,7 @@ class NotificationTest extends TestCase
     {
         Notification::fake();
 
-        $creator = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
             'status' => 'pending',
@@ -45,7 +45,7 @@ class NotificationTest extends TestCase
      */
     public function test_study_group_rejection_notification_contains_reason(): void
     {
-        $creator = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
             'name' => 'Test Study Group',
@@ -67,7 +67,7 @@ class NotificationTest extends TestCase
     {
         Notification::fake();
 
-        $author = User::factory()->create(['role' => 'student']);
+        $author = User::factory()->create([]);
         $blog = Blog::factory()->create([
             'user_id' => $author->id,
         ]);
@@ -82,7 +82,7 @@ class NotificationTest extends TestCase
      */
     public function test_blog_rejection_notification_contains_reason(): void
     {
-        $author = User::factory()->create(['role' => 'student']);
+        $author = User::factory()->create([]);
         $blog = Blog::factory()->create([
             'user_id' => $author->id,
             'title' => 'Test Blog',
@@ -104,7 +104,7 @@ class NotificationTest extends TestCase
     {
         Notification::fake();
 
-        $organizer = User::factory()->create(['role' => 'student']);
+        $organizer = User::factory()->create([]);
         $event = Event::factory()->create([
             'organizer_id' => $organizer->id,
         ]);
@@ -119,7 +119,7 @@ class NotificationTest extends TestCase
      */
     public function test_event_rejection_notification_contains_reason(): void
     {
-        $organizer = User::factory()->create(['role' => 'student']);
+        $organizer = User::factory()->create([]);
         $event = Event::factory()->create([
             'organizer_id' => $organizer->id,
             'title' => 'Test Event',
@@ -141,8 +141,8 @@ class NotificationTest extends TestCase
     {
         Notification::fake();
 
-        $creator = User::factory()->create(['role' => 'student']);
-        $member = User::factory()->create(['role' => 'student']);
+        $creator = User::factory()->create([]);
+        $member = User::factory()->create([]);
 
         $studyGroup = StudyGroup::factory()->create([
             'created_by' => $creator->id,
