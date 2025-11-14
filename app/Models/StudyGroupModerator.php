@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
-use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-use Illuminate\Database\Eloquent\Model;
-
-class StudyGroupModerator extends Model
+class StudyGroupModerator extends Pivot
 {
-    use HasUuid;
+    protected $fillable = [
+        'study_group_id',
+        'user_id',
+    ];
 
-    //
+    // This is a pivot table with composite primary key, no single 'id' column
+    public $incrementing = false;
+    protected $primaryKey = ['study_group_id', 'user_id'];
 }

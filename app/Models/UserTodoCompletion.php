@@ -2,31 +2,31 @@
 
 namespace App\Models;
 
-use App\Traits\HasUuid;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UserTodoCompletion extends Model
+class UserTodoCompletion extends Pivot
 {
-    use HasUuid;
-
-    protected $table = 'user_todo_completion';
+    protected $table = 'user_todo_completions';
 
     protected $fillable = [
-        'todo_id',
         'user_id',
-        'completed',
+        'study_group_todo_id',
+        'is_completed',
         'completed_at',
     ];
 
     protected $casts = [
-        'completed' => 'boolean',
+        'is_completed' => 'boolean',
         'completed_at' => 'datetime',
     ];
 
+    // This is a pivot table with composite primary key, no single 'id' column
+    public $incrementing = false;
+    protected $primaryKey = ['user_id', 'study_group_todo_id'];
+
     public function todo()
     {
-        return $this->belongsTo(StudyGroupTodo::class, 'todo_id');
+        return $this->belongsTo(StudyGroupTodo::class, 'study_group_todo_id');
     }
 
     public function user()
