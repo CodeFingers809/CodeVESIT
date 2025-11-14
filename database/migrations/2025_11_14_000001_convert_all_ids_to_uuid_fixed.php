@@ -334,7 +334,7 @@ return new class extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('reported_by');
-            $table->uuidMorphs('reportable');
+            $table->uuidMorphs('reportable'); // Already creates index for reportable_type and reportable_id
             $table->text('reason');
             $table->enum('status', ['pending', 'reviewing', 'resolved', 'dismissed'])->default('pending');
             $table->text('admin_notes')->nullable();
@@ -345,7 +345,6 @@ return new class extends Migration
             $table->foreign('reported_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('reviewed_by')->references('id')->on('users')->onDelete('set null');
             $table->index('status');
-            $table->index(['reportable_type', 'reportable_id']);
         });
 
         // Notifications
@@ -353,12 +352,10 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('type');
-            $table->uuidMorphs('notifiable');
+            $table->uuidMorphs('notifiable'); // Already creates index for notifiable_type and notifiable_id
             $table->text('data');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
-
-            $table->index(['notifiable_type', 'notifiable_id']);
         });
 
         // Re-enable foreign key checks
