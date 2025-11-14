@@ -16,8 +16,12 @@ return new class extends Migration
         // This is a destructive operation and will clear all data
         // Only run this on a fresh database or after backing up
 
-        // Disable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        // Disable foreign key checks (works for both MySQL and SQLite)
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        } else {
+            DB::statement('PRAGMA foreign_keys = OFF;');
+        }
 
         // ==== Drop and recreate auth tables with UUID support ====
         Schema::dropIfExists('password_reset_tokens');
@@ -329,8 +333,12 @@ return new class extends Migration
             $table->index(['reportable_type', 'reportable_id']);
         });
 
-        // Re-enable foreign key checks
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        // Re-enable foreign key checks (works for both MySQL and SQLite)
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } else {
+            DB::statement('PRAGMA foreign_keys = ON;');
+        }
     }
 
     /**
