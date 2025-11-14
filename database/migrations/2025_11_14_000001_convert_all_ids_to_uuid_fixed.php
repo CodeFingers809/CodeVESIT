@@ -48,14 +48,17 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
-            $table->string('role')->default('student');
+            $table->enum('role', ['admin', 'moderator', 'user'])->default('user');
             $table->string('department')->nullable();
-            $table->integer('year')->nullable();
-            $table->string('profile_picture')->nullable();
-            $table->string('bio', 500)->nullable();
-            $table->boolean('email_notifications')->default(true);
+            $table->string('year')->nullable();
+            $table->string('division')->nullable();
+            $table->string('roll_number')->nullable();
+            $table->text('bio')->nullable();
+            $table->string('avatar_seed')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->rememberToken();
             $table->timestamps();
+            $table->boolean('email_notifications')->default(true);
 
             $table->index('email');
             $table->index('role');
