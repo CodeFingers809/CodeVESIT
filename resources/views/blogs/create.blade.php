@@ -181,49 +181,133 @@
 
     <!-- Gruvbox Theme Customization for Quill -->
     <style>
-        /* Quill toolbar styling */
+        /* Quill toolbar styling - Light Mode */
         .ql-toolbar.ql-snow {
-            background-color: rgb(var(--gruvbox-light-bg2) / 1);
-            border: 1px solid rgb(var(--gruvbox-light-bg3) / 1);
+            background-color: #ebdbb2; /* Gruvbox light bg2 */
+            border: 2px solid #d5c4a1; /* Gruvbox light bg3 */
             border-radius: 0.5rem 0.5rem 0 0;
+            padding: 8px;
         }
 
+        /* Quill toolbar styling - Dark Mode */
         .dark .ql-toolbar.ql-snow {
-            background-color: rgb(var(--gruvbox-dark-bg2) / 1);
-            border-color: rgb(var(--gruvbox-dark-bg3) / 1);
+            background-color: #504945; /* Gruvbox dark bg2 */
+            border: 2px solid #665c54; /* Gruvbox dark bg3 */
         }
 
-        /* Quill editor container */
+        /* Quill editor container - Light Mode */
         .ql-container.ql-snow {
-            background-color: rgb(var(--gruvbox-light-bg0) / 1);
-            border: 1px solid rgb(var(--gruvbox-light-bg3) / 1);
+            background-color: #fbf1c7; /* Gruvbox light bg0 */
+            border: 2px solid #d5c4a1; /* Gruvbox light bg3 */
+            border-top: none;
             border-radius: 0 0 0.5rem 0.5rem;
-            color: rgb(var(--gruvbox-light-fg0) / 1);
+            color: #3c3836; /* Gruvbox light fg0 */
+            font-size: 16px;
         }
 
+        /* Quill editor container - Dark Mode */
         .dark .ql-container.ql-snow {
-            background-color: rgb(var(--gruvbox-dark-bg0) / 1);
-            border-color: rgb(var(--gruvbox-dark-bg3) / 1);
-            color: rgb(var(--gruvbox-dark-fg0) / 1);
+            background-color: #282828; /* Gruvbox dark bg0 */
+            border: 2px solid #665c54; /* Gruvbox dark bg3 */
+            border-top: none;
+            color: #ebdbb2; /* Gruvbox dark fg0 */
+        }
+
+        /* Toolbar buttons */
+        .ql-toolbar.ql-snow .ql-picker-label,
+        .ql-toolbar.ql-snow button {
+            color: #3c3836;
+        }
+
+        .dark .ql-toolbar.ql-snow .ql-picker-label,
+        .dark .ql-toolbar.ql-snow button {
+            color: #ebdbb2;
+        }
+
+        /* Toolbar button hover/active backgrounds */
+        .ql-toolbar.ql-snow button:hover,
+        .ql-toolbar.ql-snow button.ql-active {
+            background-color: rgba(131, 165, 152, 0.2); /* Gruvbox blue with opacity */
+        }
+
+        .dark .ql-toolbar.ql-snow button:hover,
+        .dark .ql-toolbar.ql-snow button.ql-active {
+            background-color: rgba(131, 165, 152, 0.3);
+        }
+
+        /* Toolbar icons - Light Mode */
+        .ql-snow .ql-stroke {
+            stroke: #3c3836; /* Gruvbox light fg0 */
+        }
+
+        .ql-snow .ql-fill {
+            fill: #3c3836; /* Gruvbox light fg0 */
+        }
+
+        /* Toolbar icons - Dark Mode */
+        .dark .ql-snow .ql-stroke {
+            stroke: #ebdbb2; /* Gruvbox dark fg0 */
+        }
+
+        .dark .ql-snow .ql-fill {
+            fill: #ebdbb2; /* Gruvbox dark fg0 */
+        }
+
+        /* Active/hover states for icons */
+        .ql-snow.ql-toolbar button:hover .ql-stroke,
+        .ql-snow.ql-toolbar button.ql-active .ql-stroke {
+            stroke: #83a598; /* Gruvbox blue */
+        }
+
+        .ql-snow.ql-toolbar button:hover .ql-fill,
+        .ql-snow.ql-toolbar button.ql-active .ql-fill {
+            fill: #83a598; /* Gruvbox blue */
+        }
+
+        /* Picker dropdowns */
+        .ql-snow .ql-picker-options {
+            background-color: #ebdbb2;
+            border: 1px solid #d5c4a1;
+        }
+
+        .dark .ql-snow .ql-picker-options {
+            background-color: #504945;
+            border: 1px solid #665c54;
+        }
+
+        .ql-snow .ql-picker-label:hover,
+        .ql-snow .ql-picker-item:hover {
+            color: #83a598; /* Gruvbox blue */
         }
 
         /* Editor content styling with Gruvbox colors */
+        .ql-editor {
+            min-height: 300px;
+            padding: 20px;
+        }
+
         .ql-editor h1 {
             color: #fb4934; /* Gruvbox red */
             font-size: 2em;
             font-weight: 700;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
         }
 
         .ql-editor h2 {
             color: #fabd2f; /* Gruvbox yellow */
             font-size: 1.75em;
             font-weight: 600;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
         }
 
         .ql-editor h3 {
             color: #b8bb26; /* Gruvbox green */
             font-size: 1.5em;
             font-weight: 600;
+            margin-top: 0.5em;
+            margin-bottom: 0.5em;
         }
 
         .ql-editor strong {
@@ -242,13 +326,14 @@
         .ql-editor blockquote {
             border-left: 4px solid #b8bb26;
             padding-left: 1em;
+            margin-left: 0;
         }
 
         .ql-editor code,
         .ql-editor .ql-code-block {
-            background-color: rgba(235, 219, 178, 0.1);
+            background-color: rgba(235, 219, 178, 0.2);
             color: #fe8019;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
         }
 
         .ql-editor pre {
@@ -257,46 +342,23 @@
             border-radius: 0.5rem;
         }
 
-        /* Toolbar icons */
-        .ql-snow .ql-stroke {
-            stroke: rgb(var(--gruvbox-light-fg0) / 1);
-        }
-
-        .dark .ql-snow .ql-stroke {
-            stroke: rgb(var(--gruvbox-dark-fg0) / 1);
-        }
-
-        .ql-snow .ql-fill {
-            fill: rgb(var(--gruvbox-light-fg0) / 1);
-        }
-
-        .dark .ql-snow .ql-fill {
-            fill: rgb(var(--gruvbox-dark-fg0) / 1);
-        }
-
-        /* Active/hover states */
-        .ql-snow .ql-picker-label:hover,
-        .ql-snow .ql-picker-item:hover {
-            color: #83a598;
-        }
-
-        .ql-snow.ql-toolbar button:hover .ql-stroke,
-        .ql-snow.ql-toolbar button.ql-active .ql-stroke {
-            stroke: #83a598;
-        }
-
-        .ql-snow.ql-toolbar button:hover .ql-fill,
-        .ql-snow.ql-toolbar button.ql-active .ql-fill {
-            fill: #83a598;
-        }
-
-        /* Placeholder */
+        /* Placeholder - Light Mode */
         .ql-editor.ql-blank::before {
-            color: rgb(var(--gruvbox-light-fg3) / 1);
+            color: #7c6f64; /* Gruvbox light fg3 */
+            font-style: italic;
         }
 
+        /* Placeholder - Dark Mode */
         .dark .ql-editor.ql-blank::before {
-            color: rgb(var(--gruvbox-dark-fg3) / 1);
+            color: #a89984; /* Gruvbox dark fg3 */
+        }
+
+        /* Image handling */
+        .ql-editor img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin: 10px 0;
         }
     </style>
 </x-app-layout>
