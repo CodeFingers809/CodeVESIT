@@ -95,6 +95,7 @@ return new class extends Migration
             $table->uuid('user_id');
             $table->enum('role', ['member', 'moderator'])->default('member');
             $table->timestamp('joined_at')->useCurrent();
+            $table->timestamp('created_at')->useCurrent();
 
             $table->primary(['study_group_id', 'user_id']);
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
@@ -173,14 +174,16 @@ return new class extends Migration
         Schema::create('study_group_calendar_events', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('study_group_id');
+            $table->uuid('created_by');
             $table->string('title');
             $table->text('description')->nullable();
-            $table->timestamp('start_date');
-            $table->timestamp('end_date')->nullable();
+            $table->timestamp('event_date');
             $table->string('location')->nullable();
+            $table->boolean('is_completed')->default(false);
             $table->timestamps();
 
             $table->foreign('study_group_id')->references('id')->on('study_groups')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });
 
         // Personal Calendar Events
