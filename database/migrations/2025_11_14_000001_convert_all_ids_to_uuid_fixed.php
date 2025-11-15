@@ -19,6 +19,8 @@ return new class extends Migration
         // Note: We use dropIfExists which removes all constraints,
         // so we don't need to disable foreign keys
 
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        
         // ==== Drop and recreate auth tables with UUID support ====
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
@@ -361,6 +363,8 @@ return new class extends Migration
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
+        
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 
     /**
