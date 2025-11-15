@@ -64,11 +64,6 @@ class AdminController extends Controller
 
     public function approveBlogRequest(BlogRequest $request)
     {
-        $request->update([
-            'status' => 'approved',
-            'approved_by' => auth()->id(),
-        ]);
-
         // Generate unique slug from title
         $slug = \Illuminate\Support\Str::slug($request->title);
         $originalSlug = $slug;
@@ -92,6 +87,9 @@ class AdminController extends Controller
             'approved_by' => auth()->id(),
         ]);
 
+        // Delete the blog request after approval
+        $request->delete();
+
         return back()->with('success', 'Blog request approved and published!');
     }
 
@@ -101,10 +99,8 @@ class AdminController extends Controller
             'rejection_reason' => 'required|string|max:500',
         ]);
 
-        $request->update([
-            'status' => 'rejected',
-            'rejection_reason' => $validated['rejection_reason'],
-        ]);
+        // Delete the blog request after rejection
+        $request->delete();
 
         return back()->with('success', 'Blog request rejected!');
     }
