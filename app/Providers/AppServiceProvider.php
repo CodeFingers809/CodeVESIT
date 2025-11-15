@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Auth\EloquentUserProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Set remember me token expiration to 30 days (in minutes)
-        EloquentUserProvider::$rememberFor = config('auth.remember_me_duration', 43200);
+        // Session configuration:
+        // - Normal sessions (without "remember me"): 1 day (set in config/session.php)
+        // - Remember me sessions: Laravel's default is 5 years, but we'll use cookie lifetime
+        // The remember_token is stored in the database and checked on each request
     }
 }
