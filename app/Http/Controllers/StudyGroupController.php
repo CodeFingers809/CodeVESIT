@@ -49,8 +49,8 @@ class StudyGroupController extends Controller
         $studyGroup = auth()->user()->createdStudyGroups()->create($validated);
 
         // Automatically make creator a member and moderator
-        $studyGroup->members()->attach(auth()->id());
-        $studyGroup->moderators()->attach(auth()->id(), ['assigned_by' => auth()->id()]);
+        $studyGroup->members()->attach(auth()->id(), ['role' => 'member', 'joined_at' => now()]);
+        $studyGroup->moderators()->attach(auth()->id(), ['appointed_at' => now()]);
 
         return redirect()->route('study-groups.index')
             ->with('success', 'Study group request submitted! Awaiting admin approval.');
