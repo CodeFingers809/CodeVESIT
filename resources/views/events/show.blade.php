@@ -80,7 +80,7 @@
                         </svg>
                         <div>
                             <p class="font-semibold text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">Organizer</p>
-                            <p class="text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2">{{ $event->organizer }}</p>
+                            <p class="text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2">{{ $event->organizer->name }}</p>
                         </div>
                     </div>
                 @endif
