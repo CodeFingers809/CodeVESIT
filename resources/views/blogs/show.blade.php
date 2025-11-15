@@ -41,40 +41,9 @@
 
         <!-- Blog Content -->
         <div class="p-8 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
-            @if($parsedContent)
-                <div class="prose prose-lg max-w-none">
-                    <div class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 leading-relaxed text-base">
-                        {!! $parsedContent !!}
-                    </div>
-                </div>
-                @if($blog->document_path)
-                    <div class="mt-8 pt-6 border-t border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
-                        <a href="{{ $blog->document_path }}" download class="inline-flex items-center px-4 py-2 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold text-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            Download Original Document
-                        </a>
-                    </div>
-                @endif
-            @elseif($blog->content)
-                <div class="prose prose-lg max-w-none">
-                    <div class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 whitespace-pre-wrap leading-relaxed">
-                        {{ $blog->content }}
-                    </div>
-                </div>
-            @elseif($blog->document_path)
-                <div class="text-center py-8">
-                    <svg class="w-16 h-16 mx-auto text-gruvbox-light-blue dark:text-gruvbox-dark-blue mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                    </svg>
-                    <p class="text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2 mb-4">This blog is available as a document</p>
-                    <a href="{{ $blog->document_path }}" download class="inline-flex items-center px-6 py-3 bg-gruvbox-light-blue dark:bg-gruvbox-dark-blue text-gruvbox-light-bg0 dark:text-gruvbox-dark-bg0 rounded-lg hover:opacity-90 transition-opacity font-semibold">
-                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                        </svg>
-                        Download Document
-                    </a>
+            @if($blog->content)
+                <div class="blog-content prose prose-lg max-w-none text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0 leading-relaxed">
+                    {!! $blog->content !!}
                 </div>
             @else
                 <p class="text-center text-gruvbox-light-fg3 dark:text-gruvbox-dark-fg3 py-8">No content available</p>
@@ -98,4 +67,158 @@
             </div>
         </div>
     </article>
+
+    <!-- Gruvbox Styling for Blog Content -->
+    <style>
+        .blog-content h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-top: 1.5em;
+            margin-bottom: 0.75em;
+            color: #fb4934; /* Gruvbox red */
+            line-height: 1.2;
+        }
+
+        .blog-content h2 {
+            font-size: 1.75em;
+            font-weight: 600;
+            margin-top: 1.25em;
+            margin-bottom: 0.65em;
+            color: #fabd2f; /* Gruvbox yellow */
+            line-height: 1.3;
+        }
+
+        .blog-content h3 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            color: #b8bb26; /* Gruvbox green */
+            line-height: 1.3;
+        }
+
+        .blog-content h4 {
+            font-size: 1.25em;
+            font-weight: 600;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            color: #83a598; /* Gruvbox blue */
+            line-height: 1.4;
+        }
+
+        .blog-content h5,
+        .blog-content h6 {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-top: 0.75em;
+            margin-bottom: 0.5em;
+            color: #d3869b; /* Gruvbox purple */
+            line-height: 1.4;
+        }
+
+        .blog-content p {
+            margin-bottom: 1em;
+            line-height: 1.7;
+        }
+
+        .blog-content strong,
+        .blog-content b {
+            font-weight: 700;
+            color: #fe8019; /* Gruvbox orange */
+        }
+
+        .blog-content em,
+        .blog-content i {
+            font-style: italic;
+            color: #8ec07c; /* Gruvbox aqua */
+        }
+
+        .blog-content ul,
+        .blog-content ol {
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        .blog-content li {
+            margin-bottom: 0.5em;
+            line-height: 1.6;
+        }
+
+        .blog-content ul {
+            list-style-type: disc;
+        }
+
+        .blog-content ol {
+            list-style-type: decimal;
+        }
+
+        .blog-content blockquote {
+            border-left: 4px solid #b8bb26; /* Gruvbox green */
+            padding-left: 1em;
+            margin: 1em 0;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .blog-content code {
+            background-color: rgba(235, 219, 178, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #fe8019; /* Gruvbox orange */
+        }
+
+        .blog-content pre {
+            background-color: rgba(40, 40, 40, 0.3);
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+
+        .blog-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .blog-content a {
+            color: #83a598; /* Gruvbox blue */
+            text-decoration: underline;
+        }
+
+        .blog-content a:hover {
+            color: #458588; /* Gruvbox blue dark */
+        }
+
+        .blog-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 1em 0;
+            border-radius: 5px;
+        }
+
+        .blog-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+        }
+
+        .blog-content th {
+            background-color: rgba(251, 73, 52, 0.1); /* Gruvbox red with opacity */
+            font-weight: 600;
+            padding: 0.75em;
+            border: 1px solid rgba(235, 219, 178, 0.2);
+            text-align: left;
+        }
+
+        .blog-content td {
+            padding: 0.75em;
+            border: 1px solid rgba(235, 219, 178, 0.2);
+        }
+
+        .blog-content tr:nth-child(even) {
+            background-color: rgba(235, 219, 178, 0.05);
+        }
+    </style>
 </x-app-layout>

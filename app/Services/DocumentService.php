@@ -71,6 +71,40 @@ class DocumentService
     }
 
     /**
+     * Upload an image to Cloudinary with optimization
+     *
+     * @param UploadedFile $file
+     * @param string $folder
+     * @return string URL of the uploaded image
+     * @throws \Exception
+     */
+    public function uploadImage(UploadedFile $file, string $folder = 'images'): string
+    {
+        // Validate file size
+        if ($file->getSize() > self::MAX_FILE_SIZE) {
+            throw new \Exception('Image size exceeds the maximum limit of 5MB.');
+        }
+
+        try {
+            // Upload to Cloudinary with automatic optimization
+            $uploadedFile = Cloudinary::upload($file->getRealPath(), [
+                'folder' => $folder,
+                'resource_type' => 'image',
+                'transformation' => [
+                    'quality' => 'auto:good',
+                    'fetch_format' => 'auto',
+                ],
+                'use_filename' => true,
+                'unique_filename' => true,
+            ]);
+
+            return $uploadedFile->getSecurePath();
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to upload image: ' . $e->getMessage());
+        }
+    }
+
+    /**
      * Get the maximum allowed file size in human-readable format
      *
      * @return string

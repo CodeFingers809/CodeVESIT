@@ -83,6 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/my-blogs', [BlogController::class, 'myBlogs'])->name('my');
         Route::get('/create', [BlogController::class, 'create'])->name('create');
         Route::post('/', [BlogController::class, 'store'])->name('store');
+        Route::post('/upload-image', [BlogController::class, 'uploadImage'])->name('upload-image');
         Route::get('/{blog}', [BlogController::class, 'show'])->name('show');
     });
 
