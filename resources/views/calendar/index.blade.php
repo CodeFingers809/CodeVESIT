@@ -5,12 +5,6 @@
         </h2>
     </x-slot>
 
-    @if(session('success'))
-        <div class="mb-6 p-4 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20 border border-gruvbox-light-green dark:border-gruvbox-dark-green">
-            <p class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ session('success') }}</p>
-        </div>
-    @endif
-
     <!-- Add New Event Button -->
     <div class="mb-6">
         <button onclick="document.getElementById('createEventModal').classList.remove('hidden')"

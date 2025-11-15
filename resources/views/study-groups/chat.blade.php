@@ -11,12 +11,6 @@
         </div>
     </x-slot>
 
-    @if(session('success'))
-        <div class="mb-6 p-4 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20 border border-gruvbox-light-green dark:border-gruvbox-dark-green">
-            <p class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ session('success') }}</p>
-        </div>
-    @endif
-
     @include('study-groups.partials.navigation-tabs')
 
     <div class="flex flex-col h-[calc(100vh-300px)]">

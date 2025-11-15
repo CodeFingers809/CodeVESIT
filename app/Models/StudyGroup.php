@@ -112,6 +112,11 @@ class StudyGroup extends Model
             return true;
         }
 
+        // Creator is automatically a moderator
+        if ($this->created_by === $user->id) {
+            return true;
+        }
+
         return $this->moderators()->where('user_id', $user->id)->exists();
     }
 
@@ -119,6 +124,11 @@ class StudyGroup extends Model
     {
         // Admins have member access to all study groups
         if ($user->isAdmin()) {
+            return true;
+        }
+
+        // Creator is automatically a member
+        if ($this->created_by === $user->id) {
             return true;
         }
 

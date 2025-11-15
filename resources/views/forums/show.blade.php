@@ -11,12 +11,6 @@
         </div>
     </x-slot>
 
-    @if(session('success'))
-        <div class="mb-6 p-4 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20 border border-gruvbox-light-green dark:border-gruvbox-dark-green">
-            <p class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ session('success') }}</p>
-        </div>
-    @endif
-
     <div class="mb-6 p-4 rounded-lg bg-gruvbox-light-bg1 dark:bg-gruvbox-dark-bg1 border border-gruvbox-light-bg3 dark:border-gruvbox-dark-bg3">
         <p class="text-gruvbox-light-fg2 dark:text-gruvbox-dark-fg2">{{ $forum->description }}</p>
     </div>

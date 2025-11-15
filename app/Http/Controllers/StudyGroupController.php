@@ -14,9 +14,18 @@ class StudyGroupController extends Controller
 {
     public function index(): View
     {
-        $myGroups = auth()->user()->studyGroups()->where('status', 'approved')->get();
+        // Get groups where user is a member OR creator
+        $myGroups = StudyGroup::where('status', 'approved')
+            ->where(function ($query) {
+                $query->whereHas('members', function ($q) {
+                    $q->where('user_id', auth()->id());
+                })->orWhere('created_by', auth()->id());
+            })
+            ->get();
+
         $availableGroups = StudyGroup::where('status', 'approved')
             ->where('is_active', true)
+            ->where('created_by', '!=', auth()->id())
             ->whereDoesntHave('members', function ($query) {
                 $query->where('user_id', auth()->id());
             })

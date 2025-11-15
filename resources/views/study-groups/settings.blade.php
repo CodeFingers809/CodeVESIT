@@ -15,12 +15,6 @@
 
     @include('study-groups.partials.navigation-tabs')
 
-    @if(session('success'))
-        <div class="mb-6 p-4 rounded-lg bg-gruvbox-light-green/20 dark:bg-gruvbox-dark-green/20 border border-gruvbox-light-green dark:border-gruvbox-dark-green">
-            <p class="text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">{{ session('success') }}</p>
-        </div>
-    @endif
-
     @if($errors->any())
         <div class="mb-6 p-4 rounded-lg bg-gruvbox-light-red/20 dark:bg-gruvbox-dark-red/20 border border-gruvbox-light-red dark:border-gruvbox-dark-red">
             <ul class="list-disc list-inside text-gruvbox-light-fg0 dark:text-gruvbox-dark-fg0">

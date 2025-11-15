@@ -223,6 +223,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('content');
             $table->boolean('is_pinned')->default(false);
+            $table->boolean('is_locked')->default(false);
+            $table->integer('views')->default(0);
             $table->timestamps();
 
             $table->foreign('forum_id')->references('id')->on('forums')->onDelete('cascade');
